@@ -18,6 +18,7 @@
 #==========================================================================
 
 import numpy as np
+import copy
 
 #=============== OBJECTS FOR THE SYSTEM ===================================
 class IN_Bubble:
@@ -39,9 +40,10 @@ class IN_Bubble:
         self.nextEvent = arrivalTime
         return True
         
-    def sendPerson(self):
-        index = np.random.randint(len(self.exit_connectors))
-        self.exit_connectors[index].receivePerson(self.nextPerson)
+    def sendPerson(self, index_connector = None):
+        if index_connector == None:
+            index_connector = np.random.randint(len(self.exit_connectors))
+        self.exit_connectors[index_connector].receivePerson(self.nextPerson)
         self.nextPerson = None
 
     def connect_WAIT(self, WAIT_Bubble):
@@ -75,6 +77,7 @@ class WAIT_Bubble:
         pass
         
     def connect_OUT(self, OUT_Bubble):
+        OUT_Bubble.entrance_connectors.append(self)
         self.exit_connectors.append(OUT_Bubble)    
         
 class OUT_Bubble:
@@ -86,6 +89,7 @@ class OUT_Bubble:
         self.busy_person = None
         
         self.nextEvent = -1
+        self.entrance_connectors = []
         self.exit_connectors = []
         
     def generateWork(self, person):
@@ -100,13 +104,17 @@ class OUT_Bubble:
         self.busy_person.newWork = True
         return True
         
-    def sendPerson(self, person):
+    def sendPerson(self):
         self.busy_person = None
-        pass 
+        
+        #ask for wait:
+        randomChoice = np.random.randint(len(self.entrance_connectors))
+        status = self.entrance_connectors[randomChoice].sendPerson()
+            
         
     def connect_WAIT(self, WAIT_Bubble):
         self.exit_connectors.append(WAIT_Bubble)
-
+        
     def connect_OUT(self, OUT_Bubble):
         self.exit_connectors.append(OUT_Bubble)
 
@@ -147,45 +155,78 @@ class System:
             self.nextPerson += 1
         
     def run_episode(self, printf):
+        print("New episode:")
         number_nextEvent = 999999
-        index_nextEvent = 0
-        object_nextEvent = ""
+        index_nextEvent = []
+        object_nextEvent = []
         
+        #Get next events:
         for i, item in enumerate(self.IN_BubbleList):
             if number_nextEvent > item.nextEvent and item.nextEvent != -1:
                 number_nextEvent = item.nextEvent
-                index_nextEvent = i
-                object_nextEvent = "IN_Bubble"
-        #for i, item in enumerate(self.WAIT_BubbleList):
-        #    if number_nextEvent > item.nextEvent and item.nextEvent != -1:
-        #        number_nextEvent = item.nextEvent
-        #        index_nextEvent = i
-        #        object_nextEvent = "WAIT_Bubble"
+                index_nextEvent = [i]
+                object_nextEvent = ["IN_Bubble"]
+            elif number_nextEvent == item.nextEvent and item.nextEvent != -1:
+                index_nextEvent.append(i)
+                object_nextEvent.append("IN_Bubble")     
         for i, item in enumerate(self.OUT_BubbleList):
             if number_nextEvent > item.nextEvent and item.nextEvent != -1:
                 number_nextEvent = item.nextEvent
-                index_nextEvent = i
-                object_nextEvent = "OUT_Bubble"
+                index_nextEvent = [i]
+                object_nextEvent = ["OUT_Bubble"]
+            elif number_nextEvent == item.nextEvent and item.nextEvent != -1:
+                index_nextEvent.append(i)
+                object_nextEvent.append("OUT_Bubble")
         
-        if object_nextEvent == "IN_Bubble":
-            self.IN_BubbleList[index_nextEvent].sendPerson()
-        if object_nextEvent == "WAIT_Bubble":
-            self.WAIT_BubbleList[index_nextEvent].sendPerson()
-        if object_nextEvent == "OUT_Bubble":
-            self.OUT_BubbleList[index_nextEvent].sendPerson()
-            #passedTime = self.passTime(number_nextEvent)
+        #OUT first, then IN:
+        new_index_nextEvent = []
+        new_object_nextEvent = []
+        for i, item in enumerate(object_nextEvent):
+            if item == "OUT_Bubble":
+                new_object_nextEvent.append("OUT_Bubble")
+                new_index_nextEvent.append(index_nextEvent[i])
+        for i, item in enumerate(object_nextEvent):
+            if item == "IN_Bubble":
+                new_object_nextEvent.append("IN_Bubble")
+                new_index_nextEvent.append(index_nextEvent[i])
+        index_nextEvent = new_index_nextEvent
+        object_nextEvent = new_object_nextEvent
         
+        #Act next events:
+        for i, item in enumerate(object_nextEvent):        
+            if item == "IN_Bubble":
+                self.IN_BubbleList[index_nextEvent[i]].sendPerson()
+            if item == "WAIT_Bubble":
+                self.WAIT_BubbleList[index_nextEvent[i]].sendPerson()
+            if item == "OUT_Bubble":
+                self.OUT_BubbleList[index_nextEvent[i]].sendPerson()
+                
+               
+                
         #Update clock
-        passedClock = self.clock
+        previousClock = self.clock
         self.clock = number_nextEvent
         
         self.populate_IN_Bubble()
-        self.update_OUT_Bubble(passedClock)
+        self.update_OUT_Bubble(previousClock)
         
-        
-            
         if printf == True:
             self.printSystemState()
+            #self.printNextEvent()
+            
+        print("Finished episode")    
+            
+    def printNextEvent(self):
+        print("")
+        print("nextEvents: ")
+        for i, item in enumerate(self.IN_BubbleList):
+            print("IN")
+            print(item.nextEvent)
+        
+        for i, item in enumerate(self.OUT_BubbleList):
+            print("OUT")
+            print(item.nextEvent)
+                
             
     def printSystemState(self):
         print("")
@@ -203,19 +244,18 @@ class System:
                 print("OUT_" + str(i) + ": " + "|" + str(item.busy_person.index) + "|" + str(item.busy_person.arrivalTime) + "|" + str(item.busy_person.residualWork) + "|" + str(item.busy_person.finishWorkTime))
             else:
                 print("OUT_" + str(i) + ":")
-        print("")
-                       
-    #def passTime(self, number_nextEvent):
-    #    passedTime = number_nextEvent - self.clock
+        print("")   
         
-        
-    def update_OUT_Bubble(self, passedClock):
+    def update_OUT_Bubble(self, previousClock):
         for item in self.OUT_BubbleList:
-            if item.busy_person.newWork == False:
-                item.busy_person.residualWork = item.busy_person.residualWork - (self.clock - passedClock)
-            else:
-                item.busy_person.newWork = False
-            
+            if item.busy_person != None:
+                if item.busy_person.newWork == True:
+                    item.busy_person.newWork = False
+                    item.busy_person.finishWorkTime = item.busy_person.residualWork + self.clock    
+                else:
+                    item.busy_person.residualWork -= (self.clock - previousClock)
+                item.nextEvent = item.busy_person.finishWorkTime    
+                    
     def populate_IN_Bubble(self):
         for item in self.IN_BubbleList:
             if item.nextPerson == None:
@@ -234,6 +274,7 @@ class Person:
 		self.finishWorkTime = -1
 		
 		self.newWork = False
+
 #MAIN:
 if __name__ == "__main__":
     
@@ -246,8 +287,12 @@ if __name__ == "__main__":
     bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
     bank.startSystem()
+    
+    print("New episode:")
     bank.printSystemState()
-    for i in range(2):
+    bank.printNextEvent()
+    print("Finished episode")
+    for i in range(3):
         bank.run_episode(True)
     
 
