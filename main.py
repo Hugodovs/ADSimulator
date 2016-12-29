@@ -73,8 +73,11 @@ class WAIT_Bubble:
                 return True
         return False
                 
-    def sendPerson(self, person):
-        pass
+    def sendPerson(self):
+        if self.peopleList:
+            person = self.peopleList.pop(0)
+            return person
+        return None
         
     def connect_OUT(self, OUT_Bubble):
         OUT_Bubble.entrance_connectors.append(self)
@@ -109,8 +112,9 @@ class OUT_Bubble:
         
         #ask for wait:
         randomChoice = np.random.randint(len(self.entrance_connectors))
-        status = self.entrance_connectors[randomChoice].sendPerson()
-            
+        person = self.entrance_connectors[randomChoice].sendPerson()
+        if person != None:
+            self.receivePerson(person)
         
     def connect_WAIT(self, WAIT_Bubble):
         self.exit_connectors.append(WAIT_Bubble)
@@ -154,8 +158,7 @@ class System:
             item.receivePerson(self.nextPerson, 0)
             self.nextPerson += 1
         
-    def run_episode(self, printf):
-        print("New episode:")
+    def run_episode(self, printstates = False):
         number_nextEvent = 999999
         index_nextEvent = []
         object_nextEvent = []
@@ -210,11 +213,9 @@ class System:
         self.populate_IN_Bubble()
         self.update_OUT_Bubble(previousClock)
         
-        if printf == True:
+        if printstates == True:
             self.printSystemState()
-            #self.printNextEvent()
-            
-        print("Finished episode")    
+            #self.printNextEvent() 
             
     def printNextEvent(self):
         print("")
@@ -287,13 +288,10 @@ if __name__ == "__main__":
     bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
     bank.startSystem()
-    
-    print("New episode:")
     bank.printSystemState()
-    bank.printNextEvent()
-    print("Finished episode")
-    for i in range(3):
-        bank.run_episode(True)
+    
+    for i in range(100):
+        bank.run_episode(printstates = True)
     
 
 #bank.createQueue("old")
