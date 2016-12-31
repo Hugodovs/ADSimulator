@@ -55,15 +55,18 @@ class IN_Bubble:
 class WAIT_Bubble:
     def __init__(self, policy = "FIFO"):
         self.peopleList = []
-        
+        self.policy = policy
         self.exit_connectors = []
         
     def receivePerson(self, person):
         status = self.try_OUT(person)
         if status == True:
             return
-            
-        self.peopleList.append(person)
+        
+        if self.policy == "FIFO" or self.policy == "FCFS":
+            self.peopleList.append(person)
+        if self.policy == "LCFS":
+            self.peopleList.insert(0, person)
         return
         
     def try_OUT(self, person):
@@ -115,6 +118,8 @@ class OUT_Bubble:
         person = self.entrance_connectors[randomChoice].sendPerson()
         if person != None:
             self.receivePerson(person)
+        else:
+            self.nextEvent = -1
         
     def connect_WAIT(self, WAIT_Bubble):
         self.exit_connectors.append(WAIT_Bubble)
@@ -139,8 +144,8 @@ class System:
     def create_IN_Bubble(self):
         self.IN_BubbleList.append(IN_Bubble())
         
-    def create_WAIT_Bubble(self):
-        self.WAIT_BubbleList.append(WAIT_Bubble())
+    def create_WAIT_Bubble(self, policy="FIFO"):
+        self.WAIT_BubbleList.append(WAIT_Bubble(policy=policy))
         
     def create_OUT_Bubble(self):
         self.OUT_BubbleList.append(OUT_Bubble())
@@ -279,11 +284,11 @@ class Person:
 #MAIN:
 if __name__ == "__main__":
     
-    np.random.seed(91)
+    np.random.seed(105)
     
     bank = System("bank")
     bank.create_IN_Bubble()
-    bank.create_WAIT_Bubble()
+    bank.create_WAIT_Bubble(policy="LCFS")
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
     bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
