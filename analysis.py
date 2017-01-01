@@ -1,3 +1,5 @@
+import math
+
 #class that receive states of a queue and calculate individualy usefull quantities
 #like /ro, E[U], E[X_r]...
 class CalculateParameters:
@@ -11,6 +13,7 @@ class CalculateParameters:
         self.X_r=0
         self.counter=0
         self.lastT=0
+        self.allQueues=[]
 
     #function that receive a new state of queue and update the parameters
     def updateQueue(self,queue):
@@ -25,6 +28,7 @@ class CalculateParameters:
             
         self.counter+=1
         self.lastT=queue[0][0]
+        self.allQueues.append(queue)
 
     #function that return the final values calculated
     def returnResults(self):
@@ -32,10 +36,41 @@ class CalculateParameters:
             return []
         
         ret=[]
-        ret.append((self.N_q+self.N_s)/self.lastT)
-        ret.append(self.N_q/self.lastT)
-        ret.append(self.N_s/self.lastT)
 
+        #N_q and interval calculation
+        conf=0
+        N_q=self.N_q/self.lastT
+        for i in self.allQueues:
+            conf+=(len(i[2])-N_q)**2
+        conf/=(len(self.allQueues)-1)
+        conf=1.96*conf/math.sqrt(len(self.allQueues))
+        ret.append([N_q,conf])
+
+        #N_s and interval calculation
+        conf=0
+        N_s=self.N_s/self.lastT
+        for i in self.allQueues:
+            if(len(i[3])>0):
+                conf+=(1-N_s)**2
+            else:
+                conf+=N_s**2
+        conf/=(len(self.allQueues)-1)
+        conf=1.96*conf/math.sqrt(len(self.allQueues))
+        ret.append([N_s,conf])
+        
+        #N and interval calculation
+        conf=0
+        N=(self.N_q+self.N_s)/self.lastT
+        for i in self.allQueues:
+            if(len(i[3])>0):
+                conf+=(len(i[2])+1-N)**2
+            else:
+                conf+=(len(i[2])-N)**2
+        conf/=(len(self.allQueues)-1)
+        conf=1.96*conf/math.sqrt(len(self.allQueues))
+        ret.append([N,conf])
+
+        #return [ [N_q , Err] , [N_s , Err] , [N , Err],...] 
         return ret
 
     #function that  reinicialize the queue
