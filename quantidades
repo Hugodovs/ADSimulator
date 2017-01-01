@@ -1,0 +1,11 @@
+lambda - taxa media de chegadas na fila, é um parâmetro escolhido na simulação
+mi - taxa de serviço, quantos serviços executados por tempo, E[X]=1/mi, também é um parâmetro usado na simulação
+E[N] - númro médio de pessoas no sistema,(fila+serviço)
+E[N_q] - tamanho médio da fila de espera, somente fila de espera (quantidade de pessoas)
+E[N_s] - tamanho médio do serviço, quantidade de pessoas em média no serviço
+E[T] - tempo médio que uma pessoa perde no sistema
+E[X] - tempo médio de serviço 
+E[W] = E[U] - tempo médio que uma pessoa perde apenas na fila de espera
+ro - utilização do sistema, definida como ro=lambda*E[X]=lambda/mi
+E[X_r] - alguma coisa residual, definido como E[X_r]=(1-ro)*E[W]/ro
+
