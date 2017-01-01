@@ -12,8 +12,11 @@ class CalculateParameters:
         self.U=0
         self.X_r=0
         self.counter=0
+        self.counterTime=0
         self.lastT=0
         self.allQueues=[]
+        self.lastOut=-1
+        self.times=[]
 
     #function that receive a new state of queue and update the parameters
     def updateQueue(self,queue):
@@ -24,7 +27,15 @@ class CalculateParameters:
                 self.N_s+=(queue[0][0]-self.lastT)
 
         #calculate T, X and W
-        
+        if len(queue[3])>0 and queue[3][0]!=self.lastOut:
+            self.X+=queue[3][2]
+            self.T+=queue[3][3]-queue[3][1]
+            self.U+=queue[3][3]-queue[3][1]-queue[3][2]
+            self.times.append([queue[3][2],queue[3][3]-queue[3][1],queue[3][3]-queue[3][1]-queue[3][2]])
+            
+            self.lastOut=queue[3][0]
+            self.counterTime+=1
+            
             
         self.counter+=1
         self.lastT=queue[0][0]
@@ -70,7 +81,35 @@ class CalculateParameters:
         conf=1.96*conf/math.sqrt(len(self.allQueues))
         ret.append([N,conf])
 
-        #return [ [N_q , Err] , [N_s , Err] , [N , Err],...] 
+        #X and interval calculation
+        conf=0
+        X=self.X/self.counterTime
+        for i in self.times:
+            conf+=(i[0]-X)**2
+        conf/=(len(self.times)-1)
+        conf=1.96*conf/math.sqrt(len(self.times))
+        ret.append([X,conf])
+
+        #T and interval calculation
+        conf=0
+        T=self.T/self.counterTime
+        for i in self.times:
+            conf+=(i[1]-T)**2
+        conf/=(len(self.times)-1)
+        conf=1.96*conf/math.sqrt(len(self.times))
+        ret.append([T,conf])
+
+        #U and interval calculation
+        conf=0
+        U=self.U/self.counterTime
+        for i in self.times:
+            conf+=(i[2]-U)**2
+        conf/=(len(self.times)-1)
+        conf=1.96*conf/math.sqrt(len(self.times))
+        ret.append([U,conf])
+        
+
+        #return [ [N_q , Err] , [N_s , Err] , [N , Err] , [X , Err] , [T , Err] , [U , Err] ] 
         return ret
 
     #function that  reinicialize the queue
@@ -126,11 +165,18 @@ if __name__ == "__main__":
             queue.append(wait)
             queue.append(out)
             parameters.updateQueue(queue)
-            print(queue)
             wait=[]
             queue=[]
 
     inputFile.close()
     result=parameters.returnResults()
+    print ('E[N]=%f +- %f\n' %(result[2][0] ,result[2][1]))
+    print ('E[N_q]=%f +- %f\n' %(result[0][0] ,result[0][1]))
+    print ('E[N_s]=%f +- %f\n' %(result[1][0] ,result[1][1]))
+    print ('E[X]=%f +- %f\n' %(result[3][0] ,result[3][1]))
+    print ('E[T]=%f +- %f\n' %(result[4][0] ,result[4][1]))
+    print ('E[U]=%f +- %f\n' %(result[5][0] ,result[5][1]))
+    print ('pending work=%f +- %f\n' %(result[5][0] ,result[5][1]))
+    print("\n")
     print(result)
     
