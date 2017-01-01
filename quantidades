@@ -8,4 +8,13 @@ E[X] - tempo médio de serviço
 E[W] = E[U] - tempo médio que uma pessoa perde apenas na fila de espera
 ro - utilização do sistema, definida como ro=lambda*E[X]=lambda/mi
 E[X_r] - alguma coisa residual, definido como E[X_r]=(1-ro)*E[W]/ro
+trabalho pendente = E[U] - trabalho de todas as pessoas no sistema na frente de alguém que chega
+
+
+Cara
+Uma pessoa tem 4 principais números:
+O primeiro é o índice dela (identificador)
+O segundo é o qual horário ela vai chegar na fila
+O terceiro é o quanto de trabalho falta pra ela.
+O quarto é que horas ela vai sair depois que ela terminar o trabalho que falta
 
