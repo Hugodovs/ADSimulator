@@ -138,30 +138,30 @@ if __name__ == "__main__":
         splited=i.split(' ')
         
         if splited[0]=='T:':
-            time.append(int(splited[1]))
+            time.append(float(splited[1]))
             queue.append(time)
             
         elif splited[0]=='IN_0:' or splited[0]=='IN_0:\n':
             if len(splited)>1:
                 splited2=splited[1].split('|')
-                IN.append(int(splited2[1]))
-                IN.append(int(splited2[2]))
+                IN.append(float(splited2[1]))
+                IN.append(float(splited2[2]))
             queue.append(IN)
             
         elif splited[0]=='WAIT_0:' or splited[0]=='WAIT_0:\n':
             if len(splited)>1:
                 plited2=splited[1].split('|')
-                waitTmp.append(int(splited2[1]))
-                waitTmp.append(int(splited2[2]))
+                waitTmp.append(float(splited2[1]))
+                waitTmp.append(float(splited2[2]))
                 wait.append(waitTmp)
                 
         elif splited[0]=='OUT_0:' or splited[0]=='OUT_0:\n':
             if len(splited)>1:
                 splited2=splited[1].split('|')
-                out.append(int(splited2[1]))
-                out.append(int(splited2[2]))
-                out.append(int(splited2[3]))
-                out.append(int(splited2[4]))
+                out.append(float(splited2[1]))
+                out.append(float(splited2[2]))
+                out.append(float(splited2[3]))
+                out.append(float(splited2[4]))
             queue.append(wait)
             queue.append(out)
             #queue pronto trabalhar a partir daqui
