@@ -118,7 +118,7 @@ class CalculateParameters:
 
         
 #MAIN
-#queue data struct [ [T], [I_in,T_in] , [ [I_wait1,T_wait1] , [I_wait2,T_wait2] ,... ] , [out1,out2,out3] ]
+#queue data struct [ [T], [I_in,T_in] , [ [I_wait1,T_wait1] , [I_wait2,T_wait2] ,... ] , [out1,out2,out3,out4] ]
 if __name__ == "__main__":
 
     #list to store the queue and waits
@@ -164,6 +164,7 @@ if __name__ == "__main__":
                 out.append(int(splited2[4]))
             queue.append(wait)
             queue.append(out)
+            #queue pronto trabalhar a partir daqui
             parameters.updateQueue(queue)
             wait=[]
             queue=[]
