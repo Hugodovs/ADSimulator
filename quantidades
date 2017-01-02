@@ -3,11 +3,12 @@ mi - taxa de serviço, quantos serviços executados por tempo, E[X]=1/mi, també
 E[N] - númro médio de pessoas no sistema,(fila+serviço)
 E[N_q] - tamanho médio da fila de espera, somente fila de espera (quantidade de pessoas)
 E[N_s] - tamanho médio do serviço, quantidade de pessoas em média no serviço
-E[T] - tempo médio que uma pessoa perde no sistema
-E[X] - tempo médio de serviço 
-E[W] = E[U] - tempo médio que uma pessoa perde apenas na fila de espera
+E[T] = E[U] - tempo médio que uma pessoa perde no sistema
+E[X] - tempo médio de serviço definido como 1/mi
+E[W]  - tempo médio que uma pessoa perde apenas na fila de espera
 ro - utilização do sistema, definida como ro=lambda*E[X]=lambda/mi
-E[X_r] - alguma coisa residual, definido como E[X_r]=(1-ro)*E[W]/ro
+E[X_r] - tempo medio que falta para a pessoa sair do dsistema, servir os fregueses na frente e fazer o serviço, definido como E[X_r]=(1-ro)*E[W]/ro
+E[X_r]=E[X^2]/2E[X]
 trabalho pendente = E[U] - trabalho de todas as pessoas no sistema na frente de alguém que chega
 
 
@@ -17,4 +18,5 @@ O primeiro é o índice dela (identificador)
 O segundo é o qual horário ela vai chegar na fila
 O terceiro é o quanto de trabalho falta pra ela.
 O quarto é que horas ela vai sair depois que ela terminar o trabalho que falta
+
 
