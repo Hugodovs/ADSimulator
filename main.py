@@ -33,7 +33,7 @@ class IN_Bubble:
                 
     def receivePerson(self, index, actualClock):
         if self.typeRate == "Poisson":
-            arrivalTime = actualClock + np.random.poisson(self.rate)
+            arrivalTime = actualClock + np.random.exponential(1/self.rate)
         newPerson = Person(index, arrivalTime)
 
         self.nextPerson = newPerson
@@ -88,7 +88,7 @@ class WAIT_Bubble:
         self.exit_connectors.append(OUT_Bubble)    
         
 class OUT_Bubble:
-    def __init__(self, rate = 5, typeRate = "Poisson", start = 0):
+    def __init__(self, rate = 6, typeRate = "Poisson", start = 0):
         self.rate = rate
         self.typeRate = typeRate
         self.start = start
@@ -100,7 +100,7 @@ class OUT_Bubble:
         self.exit_connectors = []
         
     def generateWork(self, person):
-        person.residualWork = np.random.poisson(self.rate)
+        person.residualWork = np.random.exponential(1/self.rate)
         
     def receivePerson(self, person):
         if self.busy_person != None:
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     bank.startSystem()
     bank.printSystemState()
     
-    for i in range(100):
+    for i in range(10000):
         bank.run_episode(printstates = True)
     
 
