@@ -22,7 +22,7 @@ import copy
 
 #=============== OBJECTS FOR THE SYSTEM ===================================
 class IN_Bubble:
-    def __init__(self, rate = 5, typeRate = "Poisson", start = 0, typePerson = ""): 
+    def __init__(self, rate = 5, typeRate = "Poisson", start = 0, typePerson = None): 
         self.rate = rate
         self.typeRate = typeRate
         self.start = start
@@ -33,7 +33,9 @@ class IN_Bubble:
                 
     def receivePerson(self, index, actualClock):
         if self.typeRate == "Poisson":
-            arrivalTime = actualClock + np.random.exponential(1/self.rate)
+            #arrivalTime = actualClock + np.random.exponential(1/self.rate)
+            arrivalTime = actualClock + np.random.poisson(self.rate)
+        
         newPerson = Person(index, arrivalTime, self.typePerson)
 
         self.nextPerson = newPerson
@@ -53,32 +55,56 @@ class IN_Bubble:
         self.exit_connectors.append(OUT_Bubble)
         
 class WAIT_Bubble:
-    def __init__(self, policy = "FIFO", preemption=False, priority=None):
+    def __init__(self, policy = "FIFO", priority=None):
         self.peopleList = []
-        self.preemption = preemption
         self.policy = policy
         self.priority = priority
         self.exit_connectors = []
         
-    def receivePerson(self, person):
-        status = self.try_OUT(person)
-        if status == True:
+    def alocatePerson(self, person):
+        if not self.peopleList:
+            self.peopleList.append(person)
             return
-            
         if self.policy == "FIFO" or self.policy == "FCFS":
-            if type(status) != bool:
-                self.peopleList.append(status)
+            if self.priority == None:
+                self.peopleList.append(person)
+                return
             else:
-                if priority != None:
-                    position = self.getPosition(person)
-                self.peopleList.insert(position, person)
+                for i, item in enumerate(self.priority):
+                    if item == person.typePerson:
+                        priorityIndex = i
+                        break
+                for i, item in enumerate(self.peopleList):
+                    if item.typePerson not in self.priority[:priorityIndex-1]:
+                        self.peopleList.insert(i, person)
+                        return
         if self.policy == "LCFS":
-            if type(status) != bool:
-                self.peopleList.insert(0, status)
-            else:
-                self.peopleList.insert(0, person)
-        return
+            self.peopleList.insert(0, person)
+                
         
+    def receivePerson(self, person):
+        self.alocatePerson(person)
+        if person == self.peopleList[0]:
+            answer = self.try_OUT(person)
+            if type(answer) == bool:
+                return
+            else:
+                del self.peopleList[0]
+                self.alocatePerson(answer)    
+        else:
+            return
+        
+    def try_OUT(self, person):
+        for item in self.exit_connectors:
+            answer = item.receivePerson(person)  
+            if type(answer) != bool:
+                return answer 
+            elif answer == True:
+                del self.peopleList[0]
+                return True
+            else:
+                return False
+    
     def getPosition(self, person):
         classPerson = person.typePerson
         mainPriority = priority[0]
@@ -86,16 +112,6 @@ class WAIT_Bubble:
             for i, item in self.peopleList:
                 if item.typePerson == classPerson:
                     return i
-        
-        
-    def try_OUT(self, person):
-        for item in self.exit_connectors:
-            status = item.receivePerson(person, self.preemption)  
-            if type(status) != bool:
-                return status 
-            if status == True:
-                return True
-        return False
                 
     def sendPerson(self):
         if self.peopleList:
@@ -108,11 +124,11 @@ class WAIT_Bubble:
         self.exit_connectors.append(OUT_Bubble)    
         
 class OUT_Bubble:
-    def __init__(self, rate = 6, typeRate = "Poisson", start = 0):
+    def __init__(self, rate = 5, typeRate = "Poisson", start = 0, preemption = False):
         self.rate = rate
         self.typeRate = typeRate
         self.start = start
-        
+        self.preemption = preemption
         self.busy_person = None
         
         self.nextEvent = -1
@@ -121,30 +137,37 @@ class OUT_Bubble:
         
     def generateWork(self, person):
         if person.newWork == False:
-            person.residualWork = np.random.exponential(1/self.rate)
-        
-    def receivePerson(self, person, preemption = False):
-        if self.busy_person != None:
-            if preemption == False:
-                return False            
+            #person.residualWork = np.random.exponential(1/self.rate)
+            person.residualWork = np.random.poisson(self.rate)
+            
+    def receivePerson(self, person):
+        #print("aeaea")
+        #print(person.index)
+        #print(person.residualWork)
+        #print(person.newWork)
+        #print("aeae")
+        if self.busy_person == None:
+            self.busy_person = person
+            self.generateWork(person)
+            self.nextEvent = self.busy_person.residualWork
+            self.busy_person.newWork = True
+            return True
+        else:
+            if self.preemption == False:
+                return False 
             else:
                 returnedPerson = self.busy_person
+                returnedPerson.newWork = True
                 self.busy_person = person
                 self.generateWork(person)
                 self.nextEvent = self.busy_person.residualWork
                 self.busy_person.newWork = True
                 return returnedPerson
-        else:
-            self.busy_person = person
-            self.generateWork(person)
-            self.nextEvent = self.busy_person.residualWork
-            self.busy_person.newWork = True            
-            return True
         
     def sendPerson(self):
         self.busy_person = None
         
-        #ask for wait:
+        #ask from wait:
         randomChoice = np.random.randint(len(self.entrance_connectors))
         person = self.entrance_connectors[randomChoice].sendPerson()
         if person != None:
@@ -172,14 +195,14 @@ class System:
         self.WAIT_BubbleList = []
         self.OUT_BubbleList = []
                 
-    def create_IN_Bubble(self, typePerson):
+    def create_IN_Bubble(self, typePerson=None):
         self.IN_BubbleList.append(IN_Bubble(typePerson=typePerson))
         
-    def create_WAIT_Bubble(self, policy="FIFO", preemption=False, priority=None):
-        self.WAIT_BubbleList.append(WAIT_Bubble(policy=policy, preemption=preemption, priority=priority))
+    def create_WAIT_Bubble(self, policy="FIFO", priority=None):
+        self.WAIT_BubbleList.append(WAIT_Bubble(policy=policy, priority=priority))
         
-    def create_OUT_Bubble(self):
-        self.OUT_BubbleList.append(OUT_Bubble())
+    def create_OUT_Bubble(self, preemption=False):
+        self.OUT_BubbleList.append(OUT_Bubble(preemption=preemption))
     
     def connect(self, object1, index1, object2, index2):
         if object1 == "IN_Bubble" and object2 == "WAIT_Bubble":
@@ -195,6 +218,7 @@ class System:
             self.nextPerson += 1
         
     def run_episode(self, printstates = False):
+        print("Inicia episode")
         number_nextEvent = 999999
         index_nextEvent = []
         object_nextEvent = []
