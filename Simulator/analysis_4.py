@@ -20,15 +20,21 @@ class CalculateParameters:
         self.times=[]
         self.N_q1=0
         self.N_q2=0
-        
+
         self.W_1=0
         self.W_2=0
         self.T_1=0
         self.T_2=0
         self.X_1=0
+        self.X_1_2=0
         self.X_2=0
+        self.X_2_2=0
         self.X_r1=0
         self.X_r2=0
+        self.times1=[]
+        self.times2=[]
+        self.counterTime1=0
+        self.counterTime2=0
 
     #function that receive a new state of queue and update the parameters
     def updateQueue(self,queue):
@@ -54,6 +60,21 @@ class CalculateParameters:
             self.T+=queue[4][4]-queue[4][2]
             self.W+=queue[4][4]-queue[4][2]-queue[4][3]
             self.times.append([queue[4][3],queue[4][4]-queue[4][2],queue[4][4]-queue[4][2]-queue[4][3],(queue[4][3])**2])
+
+            if(queue[4][0]==1):
+                self.X_1_2+=(queue[4][3])**2
+                self.X_1+=queue[4][3]
+                self.T_1+=queue[4][4]-queue[4][2]
+                self.W_1+=queue[4][4]-queue[4][2]-queue[4][3]
+                self.times1.append([queue[4][3],queue[4][4]-queue[4][2],queue[4][4]-queue[4][2]-queue[4][3],(queue[4][3])**2])
+                self.counterTime1+=1
+            elif(queue[4][0]==2):
+                self.X_2_2+=(queue[4][3])**2
+                self.X_2+=queue[4][3]
+                self.T_2+=queue[4][4]-queue[4][2]
+                self.W_2+=queue[4][4]-queue[4][2]-queue[4][3]
+                self.times2.append([queue[4][3],queue[4][4]-queue[4][2],queue[4][4]-queue[4][2]-queue[4][3],(queue[4][3])**2])
+                self.counterTime2+=1
 
             self.lastOut=queue[4][1]
             self.counterTime+=1
@@ -164,7 +185,84 @@ class CalculateParameters:
         conf=1.96*conf/math.sqrt(len(self.allQueues))
         ret.append([N_q2,conf])
 
-        #return [ [N_q , Err] , [N_s , Err] , [N , Err] , [X , Err] , [T , Err] , [W , Err] , [X_r , err] , [N_q1 , err] [N_q1 , err] ]
+        #X_1 and interval calculation
+        conf=0
+        X_1=self.X_1/self.counterTime
+        for i in self.times1:
+            conf+=(i[0]-X_1)**2
+        conf/=(len(self.times1)-1)
+        conf=1.96*conf/math.sqrt(len(self.times1))
+        ret.append([X_1,conf])
+
+        #T_1 and interval calculation
+        conf=0
+        T_1=self.T_1/self.counterTime
+        for i in self.times1:
+            conf+=(i[1]-T_1)**2
+        conf/=(len(self.times1)-1)
+        conf=1.96*conf/math.sqrt(len(self.times1))
+        ret.append([T_1,conf])
+
+        #W_1 and interval calculation
+        conf=0
+        W_1=self.W_1/self.counterTime
+        for i in self.times1:
+            conf+=(i[2]-W_1)**2
+        conf/=(len(self.times1)-1)
+        conf=1.96*conf/math.sqrt(len(self.times1))
+        ret.append([W_1,conf])
+
+        #X_r1 and interval calculation
+        conf=0
+        X_r1=(self.X_1_2/self.counterTime)/(2*(self.X_1/self.counterTime))
+        for i in self.times1:
+            conf+=(i[3]/(2*i[0])-X_r1)**2
+        conf/=(len(self.times1)-1)
+        conf=1.96*conf/math.sqrt(len(self.times1))
+        ret.append([X_r1,conf])
+
+        #X_2 and interval calculation
+        conf=0
+        X_2=self.X_2/self.counterTime
+        for i in self.times2:
+            conf+=(i[0]-X_2)**2
+        conf/=(len(self.times2)-1)
+        conf=1.96*conf/math.sqrt(len(self.times2))
+        ret.append([X_2,conf])
+
+        #T_2 and interval calculation
+        conf=0
+        T_2=self.T_2/self.counterTime
+        for i in self.times2:
+            conf+=(i[1]-T_2)**2
+        conf/=(len(self.times2)-1)
+        conf=1.96*conf/math.sqrt(len(self.times2))
+        ret.append([T_2,conf])
+
+        #W_2 and interval calculation
+        conf=0
+        W_2=self.W_2/self.counterTime
+        for i in self.times2:
+            conf+=(i[2]-W_2)**2
+        conf/=(len(self.times2)-1)
+        conf=1.96*conf/math.sqrt(len(self.times2))
+        ret.append([W_2,conf])
+
+        #X_r2 and interval calculation
+        conf=0
+        X_r2=(self.X_2_2/self.counterTime)/(2*(self.X_2/self.counterTime))
+        for i in self.times2:
+            conf+=(i[3]/(2*i[0])-X_r2)**2
+        conf/=(len(self.times2)-1)
+        conf=1.96*conf/math.sqrt(len(self.times2))
+        ret.append([X_r2,conf])
+
+        #return [
+        #[N_q , Err] , [N_s , Err] , [N , Err] , [X , Err] , [T , Err] ,
+        #[W , Err] , [X_r , err] , [N_q1 , err] [N_q1 , err] ,
+        #[X_1 , err] , [T_1 , err] , [W_1 , err] , [X_r1 , err],
+        #[X_2 , err] , [T_2 , err] , [W_2 , err] , [X_r2 , err]
+        #]
         return ret
 
     #function that  reinicialize the queue
@@ -252,5 +350,15 @@ if __name__ == "__main__":
     print ('E[X_r]=%f +- %f\n' %(result[6][0] ,result[6][1]))
     print ('E[N_q1]=%f +- %f\n' %(result[7][0] ,result[7][1]))
     print ('E[N_q2]=%f +- %f\n' %(result[8][0] ,result[8][1]))
+
+    print ('E[X_1]=%f +- %f\n' %(result[9][0] ,result[9][1]))
+    print ('E[T_1]=%f +- %f\n' %(result[10][0] ,result[10][1]))
+    print ('E[W_1]=%f +- %f\n' %(result[11][0] ,result[11][1]))
+    print ('E[X_r1]=%f +- %f\n' %(result[12][0] ,result[12][1]))
+
+    print ('E[X_2]=%f +- %f\n' %(result[13][0] ,result[13][1]))
+    print ('E[T_2]=%f +- %f\n' %(result[14][0] ,result[14][1]))
+    print ('E[W_2]=%f +- %f\n' %(result[15][0] ,result[15][1]))
+    print ('E[X_r2]=%f +- %f\n' %(result[16][0] ,result[16][1]))
     print("\n")
     print(result)
