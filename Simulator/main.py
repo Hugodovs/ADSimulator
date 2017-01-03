@@ -77,7 +77,7 @@ if __name__ == "__main__":
 ####    bank = System("bank")
 ####    bank.create_IN_Bubble(typePerson = "1")
 ####    bank.create_IN_Bubble(typePerson = "2")
-####    bank.create_WAIT_Bubble(policy="FCFS", preemption=True, priority=[1,2])
+####    bank.create_WAIT_Bubble(policy="FCFS", priority=[1,2])
 ####    bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
 ####    bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
 ####    bank.create_OUT_Bubble()
@@ -88,6 +88,24 @@ if __name__ == "__main__":
 ####    for i in range(10):
 ####        bank.run_episode(printstates = True)
 
+#===============================#
+#5) FCFS com preempção e com classe 1 com prioridade sobre classe 2 (fila única)
+
+####np.random.seed(105)
+####    
+####    bank = System("bank")
+####    bank.create_IN_Bubble(typePerson = "1")
+####    bank.create_IN_Bubble(typePerson = "2")
+####    bank.create_WAIT_Bubble(policy="FCFS", preemption=True, priority=[1,2])
+####    bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
+####    bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
+####    bank.create_OUT_Bubble()
+####    bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
+####    bank.startSystem()
+####    bank.printSystemState()
+####    
+####    for i in range(10):
+####        bank.run_episode(printstates = True)
 
 
 
