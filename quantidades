@@ -19,4 +19,17 @@ O segundo é o qual horário ela vai chegar na fila
 O terceiro é o quanto de trabalho falta pra ela.
 O quarto é que horas ela vai sair depois que ela terminar o trabalho que falta
 
+[ 
+[T], 
+[I_in,T_in] , 
+[ [I_wait1,T_wait1] , [I_wait2,T_wait2] ,... ] , 
+[out1,out2,out3,out4] ]
+
+[ 
+[T], 
+[Class_in0 , I_in0,T_in0] , 
+[Class_in1 , I_in1,T_in1] , 
+[ [Class_waith1,I_wait1,T_wait1] , [Class_waith1,I_wait2,T_wait2] ,... ] , 
+[Class_out,out1,out2,out3,out4] 
+]
 
