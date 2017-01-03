@@ -153,6 +153,7 @@ if __name__ == "__main__":
 
         elif splited[0]=='IN_0:' or splited[0]=='IN_0:\n':
             if len(splited)>1:
+                splited2=[]
                 splited2=splited[1].split('|')
                 IN.append(float(splited2[1]))
                 IN.append(float(splited2[2]))
@@ -160,13 +161,16 @@ if __name__ == "__main__":
 
         elif splited[0]=='WAIT_0:' or splited[0]=='WAIT_0:\n':
             if len(splited)>1:
-                plited2=splited[1].split('|')
+                splited2=[]
+                splited2=splited[1].split('|')
                 waitTmp.append(float(splited2[1]))
                 waitTmp.append(float(splited2[2]))
                 wait.append(waitTmp)
+                waitTmp=[]
 
         elif splited[0]=='OUT_0:' or splited[0]=='OUT_0:\n':
             if len(splited)>1:
+                splited2=[]
                 splited2=splited[1].split('|')
                 out.append(float(splited2[1]))
                 out.append(float(splited2[2]))
@@ -175,6 +179,7 @@ if __name__ == "__main__":
             queue.append(wait)
             queue.append(out)
             #queue pronto trabalhar a partir daqui
+            print(queue)
             parameters.updateQueue(queue)
             wait=[]
             queue=[]
@@ -254,5 +259,3 @@ if __name__ == "__main__":
         print(result)
 
         return result
-
-    
