@@ -190,3 +190,69 @@ if __name__ == "__main__":
     print ('E[X_r]=%f +- %f\n' %(result[6][0] ,result[6][1]))
     print("\n")
     print(result)
+
+    def Analisys():
+
+        #list to store the queue and waits
+        queue=[]
+        wait=[]
+
+        parameters=CalculateParameters()
+
+        inputFile=open('fila','r')
+
+        lines=inputFile.readlines()
+        for i in lines:
+            waitTmp=[]
+            time=[]
+            IN=[]
+            out=[]
+            splited=i.split(' ')
+
+            if splited[0]=='T:':
+                time.append(float(splited[1]))
+                queue.append(time)
+
+            elif splited[0]=='IN_0:' or splited[0]=='IN_0:\n':
+                if len(splited)>1:
+                    splited2=splited[1].split('|')
+                    IN.append(float(splited2[1]))
+                    IN.append(float(splited2[2]))
+                queue.append(IN)
+
+            elif splited[0]=='WAIT_0:' or splited[0]=='WAIT_0:\n':
+                if len(splited)>1:
+                    plited2=splited[1].split('|')
+                    waitTmp.append(float(splited2[1]))
+                    waitTmp.append(float(splited2[2]))
+                    wait.append(waitTmp)
+
+            elif splited[0]=='OUT_0:' or splited[0]=='OUT_0:\n':
+                if len(splited)>1:
+                    splited2=splited[1].split('|')
+                    out.append(float(splited2[1]))
+                    out.append(float(splited2[2]))
+                    out.append(float(splited2[3]))
+                    out.append(float(splited2[4]))
+                queue.append(wait)
+                queue.append(out)
+                #queue pronto trabalhar a partir daqui
+                parameters.updateQueue(queue)
+                wait=[]
+                queue=[]
+
+        inputFile.close()
+        result=parameters.returnResults()
+        print ('E[N]=%f +- %f\n' %(result[2][0] ,result[2][1]))
+        print ('E[N_q]=%f +- %f\n' %(result[0][0] ,result[0][1]))
+        print ('E[N_s]=%f +- %f\n' %(result[1][0] ,result[1][1]))
+        print ('E[X]=%f +- %f\n' %(result[3][0] ,result[3][1]))
+        print ('E[T]=%f +- %f\n' %(result[4][0] ,result[4][1]))
+        print ('E[W]=%f +- %f\n' %(result[5][0] ,result[5][1]))
+        print ('E[X_r]=%f +- %f\n' %(result[6][0] ,result[6][1]))
+        print("\n")
+        print(result)
+
+        return result
+
+    
