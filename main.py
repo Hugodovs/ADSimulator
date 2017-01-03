@@ -53,8 +53,9 @@ class IN_Bubble:
         self.exit_connectors.append(OUT_Bubble)
         
 class WAIT_Bubble:
-    def __init__(self, policy = "FIFO"):
+    def __init__(self, policy = "FIFO", preemption=False):
         self.peopleList = []
+        self.preemption = preemption
         self.policy = policy
         self.exit_connectors = []
         
@@ -144,8 +145,8 @@ class System:
     def create_IN_Bubble(self):
         self.IN_BubbleList.append(IN_Bubble())
         
-    def create_WAIT_Bubble(self, policy="FIFO"):
-        self.WAIT_BubbleList.append(WAIT_Bubble(policy=policy))
+    def create_WAIT_Bubble(self, policy="FIFO", preemption=False):
+        self.WAIT_BubbleList.append(WAIT_Bubble(policy=policy, preemption=preemption))
         
     def create_OUT_Bubble(self):
         self.OUT_BubbleList.append(OUT_Bubble())
@@ -288,7 +289,7 @@ if __name__ == "__main__":
     
     bank = System("bank")
     bank.create_IN_Bubble()
-    bank.create_WAIT_Bubble(policy="LCFS")
+    bank.create_WAIT_Bubble(policy="LCFS", preemption=True)
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
     bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
