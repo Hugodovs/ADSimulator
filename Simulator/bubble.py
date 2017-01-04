@@ -83,6 +83,7 @@ class WAIT_Bubble:
                 
         
     def receivePerson(self, person):
+        person.lastArrivalTime_wait = person.arrivalTime        
         self.alocatePerson(person)
         if person == self.peopleList[0]:
             answer = self.try_OUT(person)
@@ -136,42 +137,41 @@ class OUT_Bubble:
         self.exit_connectors = []
         
     def generateWork(self, person):
-        if person.newWork == False:
+        if person.residualWork == -1:
             #person.residualWork = np.random.exponential(1/self.rate)
             person.residualWork = np.random.poisson(self.rate)
             
-    def receivePerson(self, person):
-        #print("aeaea")
-        #print(person.index)
-        #print(person.residualWork)
-        #print(person.newWork)
-        #print("aeae")
+    def receivePerson(self, person, finishWorklastBusyPerson=None):
+        returnedPerson = copy.deepcopy(self.busy_person)
         if self.busy_person == None:
             self.busy_person = person
             self.generateWork(person)
             self.nextEvent = self.busy_person.residualWork
-            self.busy_person.newWork = True
+            if finishWorklastBusyPerson != None:            
+                self.busy_person.lastArrivalTime_wait = finishWorklastBusyPerson            
             return True
         else:
             if self.preemption == False:
                 return False 
-            else:
-                returnedPerson = self.busy_person
-                returnedPerson.newWork = True
+            else: 
+                returnedPerson.finishWorkTime = -1               
+                returnedPerson.lastArrivalTime_wait = person.arrivalTime
+                returnedPerson.residualWork -= person.arrivalTime - self.busy_person.lastArrivalTime_wait
+                
                 self.busy_person = person
                 self.generateWork(person)
                 self.nextEvent = self.busy_person.residualWork
-                self.busy_person.newWork = True
                 return returnedPerson
         
     def sendPerson(self):
+        finishWorklastBusyPerson = self.busy_person.finishWorkTime
         self.busy_person = None
         
         #ask from wait:
         randomChoice = np.random.randint(len(self.entrance_connectors))
         person = self.entrance_connectors[randomChoice].sendPerson()
         if person != None:
-            self.receivePerson(person)
+            self.receivePerson(person, finishWorklastBusyPerson)
         else:
             self.nextEvent = -1
         
@@ -188,7 +188,6 @@ class System:
         self.name = name
         self.clock = 0
         self.nextPerson = 0
-        
         self.peopleInSystem = 0
         
         self.IN_BubbleList = []
@@ -293,16 +292,16 @@ class System:
         print("")
         print("T: " + str(self.clock))
         for i, item in enumerate(self.IN_BubbleList):
-            print("IN_" + str(i) + ": " + "|" + str(item.nextPerson.typePerson) + "|" + str(item.nextPerson.index) + "|" + str(item.nextPerson.arrivalTime) + "|")
+            print("IN_" + str(i) + item.nextPerson.printPerson())            
         for i, item in enumerate(self.WAIT_BubbleList):
-            if item.peopleList:    
+            if item.peopleList: 
                 for person in item.peopleList:
-                    print("WAIT_" + str(i) + ": " + "|" + str(person.typePerson) + "|" + str(person.index) + "|" + str(person.arrivalTime) + "|")
+                    print("WAIT_" + str(i) + person.printPerson())
             else:
                 print("WAIT_" + str(i) + ":")
         for i, item in enumerate(self.OUT_BubbleList):
             if item.busy_person != None:
-                print("OUT_" + str(i) + ": " + "|" + str(item.busy_person.typePerson) + "|" + str(item.busy_person.index) + "|" + str(item.busy_person.arrivalTime) + "|" + str(item.busy_person.residualWork) + "|" + str(item.busy_person.finishWorkTime))
+                print("OUT_" + str(i) + item.busy_person.printPerson())
             else:
                 print("OUT_" + str(i) + ":")
         print("")   
@@ -310,10 +309,9 @@ class System:
     def update_OUT_Bubble(self, previousClock):
         for item in self.OUT_BubbleList:
             if item.busy_person != None:
-                if item.busy_person.newWork == True:
-                    item.busy_person.newWork = False
+                if item.busy_person.residualWork != -1:
                     item.busy_person.finishWorkTime = item.busy_person.residualWork + self.clock    
-                else:
+                else:                
                     item.busy_person.residualWork -= (self.clock - previousClock)
                 item.nextEvent = item.busy_person.finishWorkTime    
                     
@@ -327,13 +325,27 @@ class System:
         pass
         
 class Person:
-	def __init__(self, index, arrivalTime, typePerson = ""):
-		self.typePerson = typePerson
-		self.index = index
-		self.arrivalTime = arrivalTime 
-        
-		self.residualWork = -1
-		self.finishWorkTime = -1
-		
-		self.newWork = False
+    def __init__(self, index, arrivalTime, typePerson = ""):
+        self.typePerson = typePerson
+        self.index = index
+        self.arrivalTime = arrivalTime 
+       
+
+        self.residualWork = -1
+        self.finishWorkTime = -1
+        self.lastArrivalTime_wait = -1
+    
+    def printPerson(self):
+        string = "|" + str(self.typePerson) + "|" + str(self.index) + "|" + str(self.arrivalTime) + "|" + str(self.residualWork) + "|" + str(self.finishWorkTime) + "|" + str(self.lastArrivalTime_wait) + "|" 
+        return string
+
+
+
+
+
+
+
+
+
+
 

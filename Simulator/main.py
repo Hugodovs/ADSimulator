@@ -6,14 +6,14 @@ if __name__ == "__main__":
     
     bank = System("bank")
     bank.create_IN_Bubble()
-    bank.create_WAIT_Bubble(policy="LCFS")
+    bank.create_WAIT_Bubble(policy="FCFS")
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
-    bank.create_OUT_Bubble(preemption=True)
+    bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
     bank.startSystem()
     bank.printSystemState()
     
-    for i in range(8):
+    for i in range(20):
         bank.run_episode(printstates = True)
 
 #===============================#    
