@@ -2,13 +2,15 @@ from bubble import *
 
 if __name__ == "__main__":
     
-    np.random.seed(20)
+    np.random.seed(15)
     
     bank = System("bank")
     bank.create_IN_Bubble()
-    bank.create_WAIT_Bubble(policy="FCFS")
+    #bank.create_IN_Bubble(typePerson = 2)
+    bank.create_WAIT_Bubble(policy="LCFS")
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
-    bank.create_OUT_Bubble()
+    #bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
+    bank.create_OUT_Bubble(preemption=False)
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
     bank.startSystem()
     bank.printSystemState()
