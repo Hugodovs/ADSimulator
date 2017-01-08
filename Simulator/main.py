@@ -15,7 +15,7 @@ if __name__ == "__main__":
     bank.startSystem()
     bank.printSystemState()
 
-    for i in range(5):
+    for i in range(10000):
         bank.run_episode(printstates = True)
 
 #===============================#

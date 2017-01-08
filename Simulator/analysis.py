@@ -56,6 +56,8 @@ class CalculateParameters:
         self.X_r_2_array=[]
         self.X_r_array=[]
 
+        self.X_quad=0
+
     #function that receive a new state of queue and update the parameters
     def updateQueue(self,queue):
         if (self.counter==0):
@@ -101,10 +103,12 @@ class CalculateParameters:
             if len(queue[self.OUT_0_index])>0:
                 self.N_s+=(queue[self.T_index][self.time_index]-self.lastT)
                 self.N_s_array.append(self.N_s/queue[self.T_index][self.time_index])
+            else:
+                self.N_s_array.append(0)
             self.N_array.append((self.N_q+self.N_s)/queue[self.T_index][self.time_index])
         #calculate T, X and W and X_r
         if (len(queue[self.OUT_0_index])>0 and queue[self.OUT_0_index][self.index_index]!=self.lastOut):
-            self.X_2+=(queue[self.OUT_0_index][self.work_index])**2
+            self.X_quad+=(queue[self.OUT_0_index][self.work_index])**2
             self.X+=queue[self.OUT_0_index][self.work_index]
             self.T+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
             self.W+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
@@ -112,7 +116,7 @@ class CalculateParameters:
             self.X_array.append(self.X/(self.counterTime+1))
             self.T_array.append(self.T/(self.counterTime+1))
             self.W_array.append(self.W/(self.counterTime+1))
-            tmp=(self.X_2/(self.counterTime+1))/(2*self.X/(self.counterTime+1))
+            tmp=(self.X_quad/(self.counterTime+1))/(2*self.X/(self.counterTime+1))
             self.X_r_array.append(tmp)
 
             if (queue[self.OUT_0_index][self.class_index]==1):
@@ -233,7 +237,7 @@ class CalculateParameters:
 
         #X_r and interval calculation
         conf=0
-        X_r=(self.X_2/self.counterTime)/(2*(self.X/self.counterTime))
+        X_r=(self.X_quad/self.counterTime)/(2*(self.X/self.counterTime))
         for i in self.X_r_array:
             conf+=(i-X_r)**2
         conf/=(len(self.X_r_array)-1)
