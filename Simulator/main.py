@@ -6,11 +6,9 @@ if __name__ == "__main__":
 
     bank = System("bank")
 
-    bank.create_IN_Bubble(typePerson = "1")
-    bank.create_IN_Bubble(typePerson = "2")
-    bank.create_WAIT_Bubble(policy="FCFS", priority=[1,2])
+    bank.create_IN_Bubble()
+    bank.create_WAIT_Bubble(policy="LCFS")
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
-    bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
     bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
 

@@ -88,3 +88,16 @@ class Parse:
 
         inputFile.close()
         return retQueue
+
+    '''return of parseDo(self) function:
+    [
+        [
+            [T1],[Class_IN1],[Indice_IN1],[Chegada_IN1],[Trabalho_IN1],[Saída_IN1],[Última_IN1]
+        ],
+        [
+
+        ],
+        .
+        .
+        .
+    ]'''
