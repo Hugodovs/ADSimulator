@@ -1,37 +1,39 @@
 from bubble import *
 
 if __name__ == "__main__":
-    
+
     np.random.seed(15)
-    
+
     bank = System("bank")
-    bank.create_IN_Bubble()
-    #bank.create_IN_Bubble(typePerson = 2)
-    bank.create_WAIT_Bubble(policy="LCFS")
+
+    bank.create_IN_Bubble(typePerson = "1")
+    bank.create_IN_Bubble(typePerson = "2")
+    bank.create_WAIT_Bubble(policy="FCFS", priority=[1,2])
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
-    #bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
-    bank.create_OUT_Bubble(preemption=False)
+    bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
+    bank.create_OUT_Bubble()
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
+
     bank.startSystem()
     bank.printSystemState()
-    
-    for i in range(20):
+
+    for i in range(5):
         bank.run_episode(printstates = True)
 
-#===============================#    
-#Template padrão:    
+#===============================#
+#Template padrão:
 
 ####if __name__ == "__main__":
-####    
+####
 ####    np.random.seed(105)
-####    
+####
 ####    bank = System("bank")
-####    
+####
 ####    ...
-####    
+####
 ####    bank.startSystem()
 ####    bank.printSystemState()
-####    
+####
 ####    for i in range(100):
 ####        bank.run_episode(printstates = True)
 
@@ -83,4 +85,3 @@ if __name__ == "__main__":
 ####    bank.connect("IN_Bubble", 1, "WAIT_Bubble", 0)
 ####    bank.create_OUT_Bubble()
 ####    bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
-
