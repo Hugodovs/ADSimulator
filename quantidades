@@ -19,6 +19,10 @@ O segundo é o qual horário ela vai chegar na fila
 O terceiro é o quanto de trabalho falta pra ela.
 O quarto é que horas ela vai sair depois que ela terminar o trabalho que falta
 
+O print dá pessoa está escrito lá no método de printar.
+Mas são:
+Classe, index, tempo de chegada, trabalho residual (trabalho dela mesma), tempo de saída, a última vez que ele entrou na fila do wait
+
 [ 
 [T], 
 [I_in,T_in] , 
