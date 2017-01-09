@@ -58,6 +58,13 @@ class CalculateParameters:
 
         self.X_quad=0
 
+        '''array to store preempted persons
+        [
+        [class, index, T, W],
+        [class2, index2, T2, W2]
+        ]'''
+        self.preemp=[]
+
     #function that receive a new state of queue and update the parameters
     def updateQueue(self,queue):
         if (self.counter==0):
@@ -81,7 +88,7 @@ class CalculateParameters:
             self.come_index=2
             self.work_index=3
             self.out_index=4
-            self.las_index=5
+            self.last_index=5
         #calculate N_q and N_s only if T differs from 0
         if self.counter!=0:
             self.N_q+=len(queue[self.WAIT_0_index])*(queue[self.T_index][self.time_index]-self.lastT)
@@ -108,60 +115,103 @@ class CalculateParameters:
             self.N_array.append((self.N_q+self.N_s)/queue[self.T_index][self.time_index])
         #calculate T, X and W and X_r
         if (len(queue[self.OUT_0_index])>0 and queue[self.OUT_0_index][self.index_index]!=self.lastOut):
-            self.X_quad+=(queue[self.OUT_0_index][self.work_index])**2
-            self.X+=queue[self.OUT_0_index][self.work_index]
-            self.T+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
-            self.W+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
-            self.times.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
-            self.X_array.append(self.X/(self.counterTime+1))
+
+            preempted=False
+            for i in self.preemp:
+                if (i[1]==queue[self.OUT_0_index][self.index_index]):
+                    preempted=True
+                    break
+
+            if (preempted==False):
+                self.X_quad+=(queue[self.OUT_0_index][self.work_index])**2
+                self.X+=queue[self.OUT_0_index][self.work_index]
+                self.T+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
+                self.W+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
+                self.times.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
+                self.X_array.append(self.X/(self.counterTime+1))
+
+            else:
+                self.T+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]
+                self.W+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]-queue[self.OUT_0_index][self.work_index]
             self.T_array.append(self.T/(self.counterTime+1))
             self.W_array.append(self.W/(self.counterTime+1))
             tmp=(self.X_quad/(self.counterTime+1))/(2*self.X/(self.counterTime+1))
             self.X_r_array.append(tmp)
 
             if (queue[self.OUT_0_index][self.class_index]==1):
-                self.X_1_2+=(queue[self.OUT_0_index][self.work_index])**2
-                self.X_1+=queue[self.OUT_0_index][self.work_index]
-                self.T_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
-                self.W_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
-                self.times1.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
-                self.counterTime1+=1
-                self.X_1_array.append(self.X_1/(self.counterTime1))
+                if(preempted==False):
+                    self.X_1_2+=(queue[self.OUT_0_index][self.work_index])**2
+                    self.X_1+=queue[self.OUT_0_index][self.work_index]
+                    self.T_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
+                    self.W_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
+                    self.times1.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
+                    self.counterTime1+=1
+                    self.X_1_array.append(self.X_1/(self.counterTime1))
+
+                else:
+                    self.T_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]
+                    self.W_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]-queue[self.OUT_0_index][self.work_index]
+                    self.counterTime1+=1
+
                 self.T_1_array.append(self.T_1/(self.counterTime1))
                 self.W_1_array.append(self.W_1/(self.counterTime1))
                 tmp=(self.X_1_2/self.counterTime1)/(2*self.X_1/(self.counterTime1))
                 self.X_r_1_array.append(tmp)
+
             elif(queue[self.OUT_0_index][self.class_index]==2):
-                self.X_2_2+=(queue[self.OUT_0_index][self.work_index])**2
-                self.X_2+=queue[self.OUT_0_index][self.work_index]
-                self.T_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
-                self.W_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
-                self.times2.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
-                self.counterTime2+=1
-                self.X_2_array.append(self.X_2/(self.counterTime2))
+                if(preempted==False):
+                    self.X_2_2+=(queue[self.OUT_0_index][self.work_index])**2
+                    self.X_2+=queue[self.OUT_0_index][self.work_index]
+                    self.T_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
+                    self.W_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
+                    self.times2.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
+                    self.counterTime2+=1
+                    self.X_2_array.append(self.X_2/(self.counterTime2))
+
+                else:
+                    self.T_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]
+                    self.W_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]-queue[self.OUT_0_index][self.work_index]
+                    self.counterTime2+=1
+
                 self.T_2_array.append(self.T_2/(self.counterTime2))
                 self.W_2_array.append(self.W_2/(self.counterTime2))
                 tmp=(self.X_2_2/self.counterTime2)/(2*self.X_2/(self.counterTime2))
                 self.X_r_2_array.append(tmp)
+
             else:
-                self.X_1_2+=(queue[self.OUT_0_index][self.work_index])**2
-                self.X_1+=queue[self.OUT_0_index][self.work_index]
-                self.T_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
-                self.W_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
-                self.times1.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
-                self.counterTime1+=1
-                self.X_2_2+=(queue[self.OUT_0_index][self.work_index])**2
-                self.X_2+=queue[self.OUT_0_index][self.work_index]
-                self.T_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
-                self.W_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
-                self.times2.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
-                self.counterTime2+=1
-                self.X_1_array.append(self.X_1/(self.counterTime1))
+                if(preempted==False):
+                    self.X_1_2+=(queue[self.OUT_0_index][self.work_index])**2
+                    self.X_1+=queue[self.OUT_0_index][self.work_index]
+                    self.T_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
+                    self.W_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
+                    self.times1.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
+                    self.counterTime1+=1
+                    self.X_1_array.append(self.X_1/(self.counterTime1))
+
+                else:
+                    self.T_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]
+                    self.W_1+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]-queue[self.OUT_0_index][self.work_index]
+                    self.counterTime1+=1
+
                 self.T_1_array.append(self.T_1/(self.counterTime1))
                 self.W_1_array.append(self.W_1/(self.counterTime1))
                 tmp=(self.X_1_2/self.counterTime1)/(2*self.X_1/(self.counterTime1))
                 self.X_r_1_array.append(tmp)
-                self.X_2_array.append(self.X_2/(self.counterTime2))
+
+                if(preempted==False):
+                    self.X_2_2+=(queue[self.OUT_0_index][self.work_index])**2
+                    self.X_2+=queue[self.OUT_0_index][self.work_index]
+                    self.T_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]
+                    self.W_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
+                    self.times2.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
+                    self.counterTime2+=1
+                    self.X_2_array.append(self.X_2/(self.counterTime2))
+
+                else:
+                    self.T_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]
+                    self.W_2+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]-queue[self.OUT_0_index][self.work_index]
+                    self.counterTime2+=1
+
                 self.T_2_array.append(self.T_2/(self.counterTime2))
                 self.W_2_array.append(self.W_2/(self.counterTime2))
                 tmp=(self.X_2_2/self.counterTime2)/(2*self.X_2/(self.counterTime2))
