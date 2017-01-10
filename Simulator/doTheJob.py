@@ -1,4 +1,4 @@
-from main import *
+from bubble import *
 from parse import *
 from analysis import *
 
