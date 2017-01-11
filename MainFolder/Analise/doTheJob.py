@@ -2,6 +2,7 @@ from bubble import *
 from parse import *
 from analysis import *
 
+
 def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000):
     parse=Parse('fila')
     parameters=CalculateParameters()
@@ -45,25 +46,15 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
     errX_r2=[]
 
     f1=[]
-    errf1=[]
     f2=[]
-    errf2=[]
     f3=[]
-    errf3=[]
     f4=[]
-    errf4=[]
     f5=[]
-    errf5=[]
     f6=[]
-    errf6=[]
     f7=[]
-    errf7=[]
     f8=[]
-    errf8=[]
     f9=[]
-    errf9=[]
     f10=[]
-    errf10=[]
 
     if(politics==1):
         for i in range(lambda_init,lambda_end,lambda_step):
@@ -133,55 +124,30 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     X_r2.append(result[16][0])
                     errX_r2.append(result[16][1])
                     #formulas
-                    ro=i/j
 
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f1.append((vMax+vMin)/2)
-                    errf1.append((vMax-vMin)/2)
-#somente caso 1 e 2
-                    vMax=ro*(result[6][0]+result[6][1])+(ro**2)*(result[5][0]+result[5][1])
-                    vMin=ro*(result[6][0]-result[6][1])+(ro**2)*(result[5][0]-result[5][1])
-                    f2.append((vMax+vMin)/2)
-                    errf2.append((vMax-vMin)/2)
+                    rho_analitical = i/j
+                    rho1_analitical = i/j
+                    rho2_analitical = i/j
+                    X_analitical= 1/j
+                    X1_analitical = X_analitical
+                    X2_analitical = X_analitical
+                    Xr_analitical = X_analitical**2/2*X_analitical
+                    Xr1_analitical = X_analitical
+                    Xr2_analitical = X_analitical
+                    U_analitical = (rho_analitical*Xr_analitical)/(1 - rho_analitical)
+                    decimal_house=10
 
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f3.append((vMax+vMin)/2)
-                    errf3.append((vMax-vMin)/2)
+                    f1.append(round(U_analitical, decimal_house))
+                    f2.append(round(rho_analitical*Xr_analitical + U_analitical, decimal_house))
+                    f3.append(round(U_analitical, decimal_house))
+                    f4.append(round((X2_analitical + U_analitical)/(1 - rho1_analitical), decimal_house))
+                    f5.append(round(U_analitical/(1 - rho1_analitical), decimal_house))
+                    f6.append(round(U_analitical, decimal_house))
+                    f7.append(round(X_analitical/(1 - rho_analitical), decimal_house))
+                    f8.append(round(X1_analitical/(1 - rho1_analitical), decimal_house))
+                    f9.append(round(rho1_analitical*Xr1_analitical/(1 - rho1_analitical), decimal_house))
+                    f10.append(round(X_analitical/(1 - rho_analitical), decimal_house))
 
-                    vMax=(result[13][0]+result[13][1]+result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[13][0]-result[13][1]+result[5][0]-result[5][1])/(1-ro)
-                    f4.append((vMax+vMin)/2)
-                    errf4.append((vMax-vMin)/2)
-
-                    vMax=(result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[5][0]-result[5][1])/(1-ro)
-                    f5.append((vMax+vMin)/2)
-                    errf5.append((vMax-vMin)/2)
-
-                    f6.append(result[5][0])
-                    errf6.append(result[5][1])
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f7.append((vMax+vMin)/2)
-                    errf7.append((vMax-vMin)/2)
-
-                    vMax=(result[9][0]+result[9][1])/(1-ro)
-                    vMin=(result[9][0]-result[9][1])/(1-ro)
-                    f8.append((vMax+vMin)/2)
-                    errf8.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[12][0]+result[12][1])/(1-ro)
-                    vMin=ro*(result[12][0]-result[12][1])/(1-ro)
-                    f9.append((vMax+vMin)/2)
-                    errf9.append((vMax-vMin)/2)
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f10.append((vMax+vMin)/2)
-                    errf10.append((vMax-vMin)/2)
 
                     parameters.reinitQueue()
 
@@ -253,55 +219,28 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     X_r2.append(result[16][0])
                     errX_r2.append(result[16][1])
                     #formulas
-                    ro=i/j
+                    rho_analitical = i/j
+                    rho1_analitical = i/j
+                    rho2_analitical = i/j
+                    X_analitical= 1/j
+                    X1_analitical = X_analitical
+                    X2_analitical = X_analitical
+                    Xr_analitical = X_analitical**2/2*X_analitical
+                    Xr1_analitical = X_analitical
+                    Xr2_analitical = X_analitical
+                    U_analitical = (rho_analitical*Xr_analitical)/(1 - rho_analitical)
+                    decimal_house=10
 
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f1.append((vMax+vMin)/2)
-                    errf1.append((vMax-vMin)/2)
-#somente caso 1 e 2
-                    vMax=ro*(result[6][0]+result[6][1])+(ro**2)*(result[5][0]+result[5][1])
-                    vMin=ro*(result[6][0]-result[6][1])+(ro**2)*(result[5][0]-result[5][1])
-                    f2.append((vMax+vMin)/2)
-                    errf2.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f3.append((vMax+vMin)/2)
-                    errf3.append((vMax-vMin)/2)
-
-                    vMax=(result[13][0]+result[13][1]+result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[13][0]-result[13][1]+result[5][0]-result[5][1])/(1-ro)
-                    f4.append((vMax+vMin)/2)
-                    errf4.append((vMax-vMin)/2)
-
-                    vMax=(result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[5][0]-result[5][1])/(1-ro)
-                    f5.append((vMax+vMin)/2)
-                    errf5.append((vMax-vMin)/2)
-
-                    f6.append(result[5][0])
-                    errf6.append(result[5][1])
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f7.append((vMax+vMin)/2)
-                    errf7.append((vMax-vMin)/2)
-
-                    vMax=(result[9][0]+result[9][1])/(1-ro)
-                    vMin=(result[9][0]-result[9][1])/(1-ro)
-                    f8.append((vMax+vMin)/2)
-                    errf8.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[12][0]+result[12][1])/(1-ro)
-                    vMin=ro*(result[12][0]-result[12][1])/(1-ro)
-                    f9.append((vMax+vMin)/2)
-                    errf9.append((vMax-vMin)/2)
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f10.append((vMax+vMin)/2)
-                    errf10.append((vMax-vMin)/2)
+                    f1.append(round(U_analitical, decimal_house))
+                    f2.append(round(rho_analitical*Xr_analitical + U_analitical, decimal_house))
+                    f3.append(round(U_analitical, decimal_house))
+                    f4.append(round((X2_analitical + U_analitical)/(1 - rho1_analitical), decimal_house))
+                    f5.append(round(U_analitical/(1 - rho1_analitical), decimal_house))
+                    f6.append(round(U_analitical, decimal_house))
+                    f7.append(round(X_analitical/(1 - rho_analitical), decimal_house))
+                    f8.append(round(X1_analitical/(1 - rho1_analitical), decimal_house))
+                    f9.append(round(rho1_analitical*Xr1_analitical/(1 - rho1_analitical), decimal_house))
+                    f10.append(round(X_analitical/(1 - rho_analitical), decimal_house))
 
                     parameters.reinitQueue()
 
@@ -374,55 +313,28 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     X_r2.append(result[16][0])
                     errX_r2.append(result[16][1])
                     #formulas
-                    ro=i/j
+                    rho_analitical = i/j
+                    rho1_analitical = i/j
+                    rho2_analitical = i/j
+                    X_analitical= 1/j
+                    X1_analitical = X_analitical
+                    X2_analitical = X_analitical
+                    Xr_analitical = X_analitical**2/2*X_analitical
+                    Xr1_analitical = X_analitical
+                    Xr2_analitical = X_analitical
+                    U_analitical = (rho_analitical*Xr_analitical)/(1 - rho_analitical)
+                    decimal_house=10
 
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f1.append((vMax+vMin)/2)
-                    errf1.append((vMax-vMin)/2)
-#somente caso 1 e 2
-                    vMax=ro*(result[6][0]+result[6][1])+(ro**2)*(result[5][0]+result[5][1])
-                    vMin=ro*(result[6][0]-result[6][1])+(ro**2)*(result[5][0]-result[5][1])
-                    f2.append((vMax+vMin)/2)
-                    errf2.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f3.append((vMax+vMin)/2)
-                    errf3.append((vMax-vMin)/2)
-
-                    vMax=(result[13][0]+result[13][1]+result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[13][0]-result[13][1]+result[5][0]-result[5][1])/(1-ro)
-                    f4.append((vMax+vMin)/2)
-                    errf4.append((vMax-vMin)/2)
-
-                    vMax=(result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[5][0]-result[5][1])/(1-ro)
-                    f5.append((vMax+vMin)/2)
-                    errf5.append((vMax-vMin)/2)
-
-                    f6.append(result[5][0])
-                    errf6.append(result[5][1])
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f7.append((vMax+vMin)/2)
-                    errf7.append((vMax-vMin)/2)
-
-                    vMax=(result[9][0]+result[9][1])/(1-ro)
-                    vMin=(result[9][0]-result[9][1])/(1-ro)
-                    f8.append((vMax+vMin)/2)
-                    errf8.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[12][0]+result[12][1])/(1-ro)
-                    vMin=ro*(result[12][0]-result[12][1])/(1-ro)
-                    f9.append((vMax+vMin)/2)
-                    errf9.append((vMax-vMin)/2)
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f10.append((vMax+vMin)/2)
-                    errf10.append((vMax-vMin)/2)
+                    f1.append(round(U_analitical, decimal_house))
+                    f2.append(round(rho_analitical*Xr_analitical + U_analitical, decimal_house))
+                    f3.append(round(U_analitical, decimal_house))
+                    f4.append(round((X2_analitical + U_analitical)/(1 - rho1_analitical), decimal_house))
+                    f5.append(round(U_analitical/(1 - rho1_analitical), decimal_house))
+                    f6.append(round(U_analitical, decimal_house))
+                    f7.append(round(X_analitical/(1 - rho_analitical), decimal_house))
+                    f8.append(round(X1_analitical/(1 - rho1_analitical), decimal_house))
+                    f9.append(round(rho1_analitical*Xr1_analitical/(1 - rho1_analitical), decimal_house))
+                    f10.append(round(X_analitical/(1 - rho_analitical), decimal_house))
 
                     parameters.reinitQueue()
 
@@ -497,55 +409,28 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     X_r2.append(result[16][0])
                     errX_r2.append(result[16][1])
                     #formulas
-                    ro=i/j
+                    rho_analitical = i/j
+                    rho1_analitical = i/j
+                    rho2_analitical = i/j
+                    X_analitical= 1/j
+                    X1_analitical = X_analitical
+                    X2_analitical = X_analitical
+                    Xr_analitical = X_analitical**2/2*X_analitical
+                    Xr1_analitical = X_analitical
+                    Xr2_analitical = X_analitical
+                    U_analitical = (rho_analitical*Xr_analitical)/(1 - rho_analitical)
+                    decimal_house=10
 
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f1.append((vMax+vMin)/2)
-                    errf1.append((vMax-vMin)/2)
-#somente caso 1 e 2
-                    vMax=ro*(result[6][0]+result[6][1])+(ro**2)*(result[5][0]+result[5][1])
-                    vMin=ro*(result[6][0]-result[6][1])+(ro**2)*(result[5][0]-result[5][1])
-                    f2.append((vMax+vMin)/2)
-                    errf2.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f3.append((vMax+vMin)/2)
-                    errf3.append((vMax-vMin)/2)
-
-                    vMax=(result[13][0]+result[13][1]+result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[13][0]-result[13][1]+result[5][0]-result[5][1])/(1-ro)
-                    f4.append((vMax+vMin)/2)
-                    errf4.append((vMax-vMin)/2)
-
-                    vMax=(result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[5][0]-result[5][1])/(1-ro)
-                    f5.append((vMax+vMin)/2)
-                    errf5.append((vMax-vMin)/2)
-
-                    f6.append(result[5][0])
-                    errf6.append(result[5][1])
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f7.append((vMax+vMin)/2)
-                    errf7.append((vMax-vMin)/2)
-
-                    vMax=(result[9][0]+result[9][1])/(1-ro)
-                    vMin=(result[9][0]-result[9][1])/(1-ro)
-                    f8.append((vMax+vMin)/2)
-                    errf8.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[12][0]+result[12][1])/(1-ro)
-                    vMin=ro*(result[12][0]-result[12][1])/(1-ro)
-                    f9.append((vMax+vMin)/2)
-                    errf9.append((vMax-vMin)/2)
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f10.append((vMax+vMin)/2)
-                    errf10.append((vMax-vMin)/2)
+                    f1.append(round(U_analitical, decimal_house))
+                    f2.append(round(rho_analitical*Xr_analitical + U_analitical, decimal_house))
+                    f3.append(round(U_analitical, decimal_house))
+                    f4.append(round((X2_analitical + U_analitical)/(1 - rho1_analitical), decimal_house))
+                    f5.append(round(U_analitical/(1 - rho1_analitical), decimal_house))
+                    f6.append(round(U_analitical, decimal_house))
+                    f7.append(round(X_analitical/(1 - rho_analitical), decimal_house))
+                    f8.append(round(X1_analitical/(1 - rho1_analitical), decimal_house))
+                    f9.append(round(rho1_analitical*Xr1_analitical/(1 - rho1_analitical), decimal_house))
+                    f10.append(round(X_analitical/(1 - rho_analitical), decimal_house))
 
                     parameters.reinitQueue()
 
@@ -620,55 +505,28 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     X_r2.append(result[16][0])
                     errX_r2.append(result[16][1])
                     #formulas
-                    ro=i/j
+                    rho_analitical = i/j
+                    rho1_analitical = i/j
+                    rho2_analitical = i/j
+                    X_analitical= 1/j
+                    X1_analitical = X_analitical
+                    X2_analitical = X_analitical
+                    Xr_analitical = X_analitical**2/2*X_analitical
+                    Xr1_analitical = X_analitical
+                    Xr2_analitical = X_analitical
+                    U_analitical = (rho_analitical*Xr_analitical)/(1 - rho_analitical)
+                    decimal_house=10
 
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f1.append((vMax+vMin)/2)
-                    errf1.append((vMax-vMin)/2)
-#somente caso 1 e 2
-                    vMax=ro*(result[6][0]+result[6][1])+(ro**2)*(result[5][0]+result[5][1])
-                    vMin=ro*(result[6][0]-result[6][1])+(ro**2)*(result[5][0]-result[5][1])
-                    f2.append((vMax+vMin)/2)
-                    errf2.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
-                    f3.append((vMax+vMin)/2)
-                    errf3.append((vMax-vMin)/2)
-
-                    vMax=(result[13][0]+result[13][1]+result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[13][0]-result[13][1]+result[5][0]-result[5][1])/(1-ro)
-                    f4.append((vMax+vMin)/2)
-                    errf4.append((vMax-vMin)/2)
-
-                    vMax=(result[5][0]+result[5][1])/(1-ro)
-                    vMin=(result[5][0]-result[5][1])/(1-ro)
-                    f5.append((vMax+vMin)/2)
-                    errf5.append((vMax-vMin)/2)
-
-                    f6.append(result[5][0])
-                    errf6.append(result[5][1])
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f7.append((vMax+vMin)/2)
-                    errf7.append((vMax-vMin)/2)
-
-                    vMax=(result[9][0]+result[9][1])/(1-ro)
-                    vMin=(result[9][0]-result[9][1])/(1-ro)
-                    f8.append((vMax+vMin)/2)
-                    errf8.append((vMax-vMin)/2)
-
-                    vMax=ro*(result[12][0]+result[12][1])/(1-ro)
-                    vMin=ro*(result[12][0]-result[12][1])/(1-ro)
-                    f9.append((vMax+vMin)/2)
-                    errf9.append((vMax-vMin)/2)
-
-                    vMax=(result[3][0]+result[3][1])/(1-ro)
-                    vMin=(result[3][0]-result[3][1])/(1-ro)
-                    f10.append((vMax+vMin)/2)
-                    errf10.append((vMax-vMin)/2)
+                    f1.append(round(U_analitical, decimal_house))
+                    f2.append(round(rho_analitical*Xr_analitical + U_analitical, decimal_house))
+                    f3.append(round(U_analitical, decimal_house))
+                    f4.append(round((X2_analitical + U_analitical)/(1 - rho1_analitical), decimal_house))
+                    f5.append(round(U_analitical/(1 - rho1_analitical), decimal_house))
+                    f6.append(round(U_analitical, decimal_house))
+                    f7.append(round(X_analitical/(1 - rho_analitical), decimal_house))
+                    f8.append(round(X1_analitical/(1 - rho1_analitical), decimal_house))
+                    f9.append(round(rho1_analitical*Xr1_analitical/(1 - rho1_analitical), decimal_house))
+                    f10.append(round(X_analitical/(1 - rho_analitical), decimal_house))
 
                     parameters.reinitQueue()
 
@@ -710,24 +568,14 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
     ret.append(errX_r2)
 
     ret.append(f1)
-    ret.append(errf1)
     ret.append(f2)
-    ret.append(errf2)
     ret.append(f3)
-    ret.append(errf3)
     ret.append(f4)
-    ret.append(errf4)
     ret.append(f5)
-    ret.append(errf5)
     ret.append(f6)
-    ret.append(errf6)
     ret.append(f7)
-    ret.append(errf7)
     ret.append(f8)
-    ret.append(errf8)
     ret.append(f9)
-    ret.append(errf9)
     ret.append(f10)
-    ret.append(errf10)
 
     return ret
