@@ -40,8 +40,8 @@ class IN_Bubble:
 
     def receivePerson(self, index, actualClock):
         if self.typeRate == "Poisson":
-            #arrivalTime = actualClock + np.random.exponential(1/self.rate)
-            arrivalTime = actualClock + np.random.exponential(self.rate)
+            arrivalTime = actualClock + np.random.exponential(1/self.rate)
+            #arrivalTime = actualClock + np.random.poisson(self.rate)
         newPerson = Person(index, arrivalTime, self.typePerson)
         self.nextPerson = newPerson
         self.nextEvent = arrivalTime
@@ -199,9 +199,9 @@ class OUT_Bubble:
 
     def generateWork(self, person):
         if person.residualWork == -1:
-            #person.residualWork = np.random.exponential(1/self.rate)
+            person.residualWork = np.random.exponential(1/self.rate)
             person.residualFlag = True
-            person.residualWork = np.random.exponential(self.rate)
+            #person.residualWork = np.random.poisson(self.rate)
     def connect_WAIT(self, WAIT_Bubble):
         self.exit_connectors.append(WAIT_Bubble)
 
