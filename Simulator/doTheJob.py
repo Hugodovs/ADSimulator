@@ -2,7 +2,7 @@ from bubble import *
 from parse import *
 from analysis import *
 
-def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,politics=1,iterations=1000):
+def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000):
     parse=Parse('fila')
     parameters=CalculateParameters()
 
@@ -65,24 +65,6 @@ def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_st
     f10=[]
     errf10=[]
 
-    N_Teo=[]
-    N_q_Teo=[]
-    N_q1_Teo=[]
-    N_q2_Teo=[]
-    N_s_Teo=[]
-    X_Teo=[]
-    X_1_Teo=[]
-    X_2_Teo=[]
-    T_Teo=[]
-    T_1_Teo=[]
-    T_2_Teo=[]
-    W_Teo=[]
-    W_1_Teo=[]
-    W_2_Teo=[]
-    X_r_Teo=[]
-    X_r1_Teo=[]
-    X_r2_Teo=[]
-
     np.random.seed(129)
     bank = System("bank")
 
@@ -99,10 +81,13 @@ def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_st
                     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
 
                     bank.startSystem()
-                    bank.printSystemState()
+                    finalString = bank.saveInString()
 
                     for i in range(iterations):
-                        bank.run_episode(printstates = True)
+                        finalString += bank.run_episode(printstates = True)
+
+                    with open("file", "w") as f:
+                        f.write(finalString)
 
                     #analysis of file
                     queue=parse.parseDo()
@@ -151,8 +136,8 @@ def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_st
                     #formulas
                     ro=i/j
 
-                    vMax=ro*(result[6][0]+result[6][1]/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1]/(1-ro)
+                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
+                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
                     f1.append((vMax+vMin)/2)
                     errf1.append((vMax-vMin)/2)
 #somente caso 1 e 2
@@ -161,8 +146,8 @@ def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_st
                     f2.append((vMax+vMin)/2)
                     errf2.append((vMax-vMin)/2)
 
-                    vMax=ro*(result[6][0]+result[6][1]/(1-ro)
-                    vMin=ro*(result[6][0]-result[6][1]/(1-ro)
+                    vMax=ro*(result[6][0]+result[6][1])/(1-ro)
+                    vMin=ro*(result[6][0]-result[6][1])/(1-ro)
                     f3.append((vMax+vMin)/2)
                     errf3.append((vMax-vMin)/2)
 
@@ -199,36 +184,17 @@ def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_st
                     f10.append((vMax+vMin)/2)
                     errf10.append((vMax-vMin)/2)
 
-                    #analitical values
-                    N_Teo.append(0)
-                    N_q_Teo.append(0)
-                    N_q1_Teo.append(0)
-                    N_q2_Teo.append(0)
-                    N_s_Teo.append(0)
-                    X_Teo.append(0)
-                    X_1_Teo.append(0)
-                    X_2_Teo.append(0)
-                    T_Teo.append(0)
-                    T_1_Teo.append(0)
-                    T_2_Teo.append(0)
-                    W_Teo.append(0)
-                    W_1_Teo.append(0)
-                    W_2_Teo.append(0)
-                    X_r_Teo.append(0)
-                    X_r1_Teo.append(0)
-                    X_r2_Teo.append(0)
-
     elif(politics==2):
-
+        pass
 
     elif(politics==3):
+        pass
 
-
-    elif(politics==4);
-
+    elif(politics==4):
+        pass
 
     elif(politics==5):
-
+        pass
 
     ret.append(lambda_par)
     ret.append(mi_par)
@@ -287,24 +253,5 @@ def doTheJob(lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_st
     ret.append(errf9)
     ret.append(f10)
     ret.append(errf10)
-
-    ret.append(N_Teo)
-    ret.append(N_q_Teo)
-    ret.append(N_q1_Teo)
-    ret.append(N_q2_Teo)
-    ret.append(N_s_Teo)
-    ret.append(X_Teo)
-    ret.append(X_1_Teo)
-    ret.append(X_2_Teo)
-    ret.append(T_Teo)
-    ret.append(T_1_Teo)
-    ret.append(T_2_Teo)
-    ret.append(W_Teo)
-    ret.append(W_1_Teo)
-    ret.append(W_2_Teo)
-    ret.append(X_r_Teo)
-    ret.append(X_r1_Teo)
-    ret.append(X_r2_Teo)
-
 
     return ret

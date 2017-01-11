@@ -7,7 +7,7 @@ def returnVectorNumerical():
 
 def runQueue(i):
     np.random.seed(i)
-        
+
     bank = bb.System("bank")
     bank.create_IN_Bubble()
     bank.create_WAIT_Bubble(policy="FCFS")
@@ -16,26 +16,20 @@ def runQueue(i):
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
     bank.startSystem()
     finalString = bank.saveInString()
-        
+
     for i in range(2000):
         finalString += bank.run_episode(printstates = True)
-    
+
     with open("arquivo.txt", "w") as f:
         f.write(finalString)
-        
+
     return finalString
 
 if __name__ == "__main__":
-        
+
     for i in range(100):
-        
+
         finalString = runQueue(i)
-        
+
         #Do whatever you want with finalString
         #...
-        
-        
-        
-        
-        
-        
