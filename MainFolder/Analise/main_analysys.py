@@ -35,4 +35,5 @@ if __name__ == "__main__":
     print ('E[T_2]=%f +- %f\n' %(result[14][0] ,result[14][1]))
     print ('E[W_2]=%f +- %f\n' %(result[15][0] ,result[15][1]))
     print ('E[X_r2]=%f +- %f\n' %(result[16][0] ,result[16][1]))
+    print ('E[B]=%f +- %f\n' %(result[17][0] ,result[17][1]))
     print("\n")

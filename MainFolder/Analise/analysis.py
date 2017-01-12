@@ -58,6 +58,9 @@ class CalculateParameters:
 
         self.X_quad=0
 
+        self.B=0
+        self.B_array=[]
+
         '''array to store preempted persons
         [
         [class, index, T, W],
@@ -130,6 +133,8 @@ class CalculateParameters:
                 self.W+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index]
                 self.times.append([queue[self.OUT_0_index][self.work_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index],queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.come_index]-queue[self.OUT_0_index][self.work_index],(queue[self.OUT_0_index][self.work_index])**2])
                 self.X_array.append(self.X/(self.counterTime+1))
+                self.B+=queue[self.OUT_0_index][self.work_index]
+                self.B_array.append(self.B/queue[0][0])
 
             else:
                 self.T+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]
@@ -384,6 +389,15 @@ class CalculateParameters:
         conf/=(len(self.X_r_2_array)-1)
         conf=1.96*conf/math.sqrt(len(self.X_r_2_array))
         ret.append([X_r2,conf])
+
+        #B and interval calculation
+        conf=0
+        B=self.B/self.lastT
+        for i in self.B_array:
+            conf+=(i-B)**2
+        conf/=(len(self.B_array)-1)
+        conf=1.96*conf/math.sqrt(len(self.B_array))
+        ret.append([B,conf])
 
         #return [
         #[N_q , Err] , [N_s , Err] , [N , Err] , [X , Err] , [T , Err] ,
