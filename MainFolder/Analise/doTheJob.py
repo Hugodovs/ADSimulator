@@ -46,6 +46,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
     errX_r2=[]
     B=[]
     errB=[]
+    U=[]
+    errU=[]
 
     f1=[]
     f2=[]
@@ -127,6 +129,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     errX_r2.append(result[16][1])
                     B.append(result[17][0])
                     errB.append(result[17][1])
+                    U.append(result[18][0])
+                    errU.append(result[18][1])
                     #formulas
 
                     rho_analitical = i/j
@@ -224,6 +228,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     errX_r2.append(result[16][1])
                     B.append(result[17][0])
                     errB.append(result[17][1])
+                    U.append(result[18][0])
+                    errU.append(result[18][1])
                     #formulas
                     rho_analitical = i/j
                     rho1_analitical = i/j
@@ -320,6 +326,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     errX_r2.append(result[16][1])
                     B.append(result[17][0])
                     errB.append(result[17][1])
+                    U.append(result[18][0])
+                    errU.append(result[18][1])
                     #formulas
                     rho_analitical = i/j
                     rho1_analitical = i/j
@@ -418,6 +426,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     errX_r2.append(result[16][1])
                     B.append(result[17][0])
                     errB.append(result[17][1])
+                    U.append(result[18][0])
+                    errU.append(result[18][1])
                     #formulas
                     rho_analitical = i/j
                     rho1_analitical = i/j
@@ -516,6 +526,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
                     errX_r2.append(result[16][1])
                     B.append(result[17][0])
                     errB.append(result[17][1])
+                    U.append(result[18][0])
+                    errU.append(result[18][1])
                     #formulas
                     rho_analitical = i/j
                     rho1_analitical = i/j

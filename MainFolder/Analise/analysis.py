@@ -61,6 +61,8 @@ class CalculateParameters:
         self.B=0
         self.B_array=[]
 
+        self.U_array=[]
+
         '''array to store preempted persons
         [
         [class, index, T, W],
@@ -93,9 +95,11 @@ class CalculateParameters:
             self.out_index=4
             self.last_index=5
         #calculate N_q and N_s only if T differs from 0
-        if self.counter!=0:
+        if self.counter!=0 :
             self.N_q+=len(queue[self.WAIT_0_index])*(queue[self.T_index][self.time_index]-self.lastT)
             self.N_q_array.append(self.N_q/queue[self.T_index][self.time_index])
+            if(self.counter<10):
+                print(len(queue[self.WAIT_0_index])*(queue[self.T_index][self.time_index]-self.lastT))
 
             counter1=0
             counter2=0
@@ -117,6 +121,7 @@ class CalculateParameters:
             else:
                 self.N_s_array.append(0)
             self.N_array.append((self.N_q+self.N_s)/queue[self.T_index][self.time_index])
+
         #calculate T, X and W and X_r
         if (len(queue[self.OUT_0_index])>0 and queue[self.OUT_0_index][self.index_index]!=self.lastOut):
 
@@ -141,7 +146,7 @@ class CalculateParameters:
                 self.W+=queue[self.OUT_0_index][self.out_index]-queue[self.OUT_0_index][self.last_index]-queue[self.OUT_0_index][self.work_index]
             self.T_array.append(self.T/(self.counterTime+1))
             self.W_array.append(self.W/(self.counterTime+1))
-            tmp=(self.X_quad/(self.counterTime+1))/(2*self.X/(self.counterTime+1))
+            tmp=(self.X/(self.counterTime+1))**2/(2*self.X/(self.counterTime+1))
             self.X_r_array.append(tmp)
 
             if (queue[self.OUT_0_index][self.class_index]==1):
@@ -223,8 +228,13 @@ class CalculateParameters:
                 tmp=(self.X_2_2/self.counterTime2)/(2*self.X_2/(self.counterTime2))
                 self.X_r_2_array.append(tmp)
 
+
+
             self.lastOut=queue[self.OUT_0_index][self.index_index]
             self.counterTime+=1
+            if(self.lastT!=0 and self.counterTime!=0):
+                ro_tmp=(self.N_q/(self.lastT))*(self.X/self.counterTime)/(self.W/self.counterTime)
+                self.U_array.append(ro_tmp*((self.X/self.counterTime)**2/(2*(self.X/self.counterTime)))/(1-ro_tmp))
 
         self.counter+=1
         self.lastT=queue[self.T_index][self.time_index]
@@ -293,7 +303,7 @@ class CalculateParameters:
 
         #X_r and interval calculation
         conf=0
-        X_r=(self.X_quad/self.counterTime)/(2*(self.X/self.counterTime))
+        X_r=(self.X/self.counterTime)**2/(2*(self.X/self.counterTime))
         for i in self.X_r_array:
             conf+=(i-X_r)**2
         conf/=(len(self.X_r_array)-1)
@@ -398,6 +408,16 @@ class CalculateParameters:
         conf/=(len(self.B_array)-1)
         conf=1.96*conf/math.sqrt(len(self.B_array))
         ret.append([B,conf])
+
+        #U and interval calculation
+        conf=0
+        ro_tmp=N_q*X/W
+        U=ro_tmp*X_r/(1-ro_tmp)
+        for i in self.U_array:
+            conf+=(i-U)**2
+        conf/=(len(self.U_array)-1)
+        conf=1.96*conf/math.sqrt(len(self.U_array))
+        ret.append([U,conf])
 
         #return [
         #[N_q , Err] , [N_s , Err] , [N , Err] , [X , Err] , [T , Err] ,
