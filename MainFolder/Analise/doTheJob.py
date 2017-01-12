@@ -65,7 +65,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(129)
+                    np.random.seed(255)
                     bank = System("bank")
                     #generate the queues for analysis
                     bank.create_IN_Bubble(ratePar=i)
@@ -164,7 +164,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(129)
+                    np.random.seed(94)
                     bank = System("bank")
                     #generate the queues for analysis
                     bank.create_IN_Bubble(ratePar=i)
@@ -261,7 +261,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(129)
+                    np.random.seed(96)
                     bank = System("bank")
                     #generate the queues for analysis
 
@@ -359,7 +359,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(129)
+                    np.random.seed(199)
                     bank = System("bank")
                     #generate the queues for analysis
 
@@ -459,7 +459,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(129)
+                    np.random.seed(700)
                     bank = System("bank")
                     #generate the queues for analysis
 
@@ -592,6 +592,8 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
     ret.append(errX_r2)
     ret.append(B)
     ret.append(errB)
+    ret.append(U)
+    ret.append(errU)
 
     ret.append(f1)
     ret.append(f2)

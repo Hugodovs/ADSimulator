@@ -12,24 +12,27 @@ result=doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,m
 
 x=result[0]
 y=result[1]
-z=result[38]
-w=result[40]
+z=result[36]
+w=result[49]
 
-z_linha=[]
+#z_linha=[]
+z_linha=z
 
-for item in z:
+'''for item in z:
     var=np.random.randint(0,2)
     if var==1:
-        z_linha.append(item+np.random.random_sample()/70)
+        z_linha.append(item+np.random.random_sample()/400)
     else:
-        z_linha.append(item-np.random.random_sample()/70)
+        z_linha.append(item-np.random.random_sample()/400)'''
 
 plt.xlabel('lambda')
 plt.ylabel('mi')
 
+plt.title('E[B]')
 
-ax.plot_trisurf(x, y, z_linha, color='blue', linewidth=0.2)
-ax.plot_trisurf(x, y, w, color='red' , linewidth=0.2,alpha=0.5)
+
+ax.plot_trisurf(x, y, z_linha, color='blue', linewidth=0.2)  #numerico
+ax.plot_trisurf(x, y, w, color='red' , linewidth=0.2,alpha=0.5)  #analitico
 
 
 plt.show()
