@@ -7,9 +7,6 @@ from doTheJob import *
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-#x = [1,2,3]
-#y = [1,4,9]
-#z = [3,6,9]
 
 result=doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000)
 
@@ -23,18 +20,16 @@ z_linha=[]
 for item in z:
     var=np.random.randint(0,2)
     if var==1:
-        z_linha.append(item+np.random.random_sample()/100)
+        z_linha.append(item+np.random.random_sample()/70)
     else:
-        z_linha.append(item-np.random.random_sample()/100)
+        z_linha.append(item-np.random.random_sample()/70)
 
 plt.xlabel('lambda')
 plt.ylabel('mi')
 
-my_col = cm.jet(np.ones((len(z_linha),len(z_linha))))
 
-
-ax.plot_trisurf(x, y, z_linha, cmap='Blues', linewidth=0.2,alpha=0.5,facecolors = my_col)
-ax.plot_trisurf(x, y, w, cmap='Reds' , linewidth=0.2,alpha=0.5,facecolors = my_col)
+ax.plot_trisurf(x, y, z_linha, color='blue', linewidth=0.2)
+ax.plot_trisurf(x, y, w, color='red' , linewidth=0.2,alpha=0.5)
 
 
 plt.show()
