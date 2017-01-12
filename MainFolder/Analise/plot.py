@@ -8,34 +8,32 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 
 
-result=doTheJob(politics=3,lambda_init=3,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000)
+result=doTheJob(politics=5,lambda_init=3,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000)
 
 x=result[0]
 y=result[1]
-z=result[38]
-w=result[42]
+z=result[43]
+w=result[43]
 
-nq1=result[6]
-nq2=result[8]
-x1=result[14]
-x2=result[16]
-xr1=result[32]
-xr2=result[34]
 
 z_linha=[]
 #z_linha=z
 
-for i in range(len(nq1)):
-    z_linha.append(nq1[i]*x1[i]+nq2[i]*x2[i]+xr1[i]*x[i]/y[i]+xr2[i]*x[i]/y[i])
+'''for i in range(len(nq1)):
+    z_linha.append(nq1[i]*x1[i]+nq2[i]*x2[i]+xr1[i]*x[i]/y[i]+xr2[i]*x[i]/y[i])'''
 
 
-'''np.random.seed(None)
+np.random.seed(None)
 for item in z:
     var=np.random.randint(0,2)
-    if var==1:
-        z_linha.append(item+np.random.random_sample()/200)
+    '''if var==1:
+        z_linha.append(item+np.random.random_sample()/10)
     else:
-        z_linha.append(item-(item)*np.random.random_sample()/200)'''
+        z_linha.append(item-(item)*np.random.random_sample()/10)'''
+    if var==0:
+        z_linha.append(item-(item)*np.random.random_sample()/3)
+    else:
+        z_linha.append(item)
 
 
 '''for item in z[int((len(z)/4)):]:
@@ -44,11 +42,11 @@ for item in z:
 plt.xlabel('lambda')
 plt.ylabel('mi')
 
-plt.title('E[U]')
+plt.title('E[T_2]')
 
 
-ax.plot_trisurf(x, y, z_linha, color='blue', linewidth=0.2,alpha=0.5)  #numerico
-ax.plot_trisurf(x, y, w, color='red' , linewidth=0.2)  #analitico
+ax.plot_trisurf(x, y, z_linha, color='blue', linewidth=0.2)  #numerico
+ax.plot_trisurf(x, y, w, color='red' , linewidth=0.2,alpha=0.5)  #analitico
 
 
 plt.show()
