@@ -98,8 +98,6 @@ class CalculateParameters:
         if self.counter!=0 :
             self.N_q+=len(queue[self.WAIT_0_index])*(queue[self.T_index][self.time_index]-self.lastT)
             self.N_q_array.append(self.N_q/queue[self.T_index][self.time_index])
-            if(self.counter<10):
-                print(len(queue[self.WAIT_0_index])*(queue[self.T_index][self.time_index]-self.lastT))
 
             counter1=0
             counter2=0
@@ -232,7 +230,7 @@ class CalculateParameters:
 
             self.lastOut=queue[self.OUT_0_index][self.index_index]
             self.counterTime+=1
-            if(self.lastT!=0 and self.counterTime!=0):
+            if(self.lastT!=0 and self.counterTime!=0 and self.W and self.X):
                 ro_tmp=(self.N_q/(self.lastT))*(self.X/self.counterTime)/(self.W/self.counterTime)
                 self.U_array.append(ro_tmp*((self.X/self.counterTime)**2/(2*(self.X/self.counterTime)))/(1-ro_tmp))
 
@@ -412,7 +410,7 @@ class CalculateParameters:
         #U and interval calculation
         conf=0
         ro_tmp=N_q*X/W
-        U=ro_tmp*X_r/(1-ro_tmp)
+        U=ro_tmp*X_r/(2*(1-ro_tmp))
         for i in self.U_array:
             conf+=(i-U)**2
         conf/=(len(self.U_array)-1)

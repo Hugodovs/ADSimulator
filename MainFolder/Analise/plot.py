@@ -1,4 +1,4 @@
-'''from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,29 +11,45 @@ ax = fig.gca(projection='3d')
 #y = [1,4,9]
 #z = [3,6,9]
 
-result=doTheJob(politics=1,lambda_init=1,lambda_end=1000,lambda_step=100,mi_init=1,mi_end=1000,mi_step=100,iterations=1000)
+result=doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000)
 
 x=result[0]
 y=result[1]
-z=result[24]
-w=result[41]
+z=result[38]
+w=result[40]
+
+z_linha=[]
+
+for item in z:
+    var=np.random.randint(0,2)
+    if var==1:
+        z_linha.append(item+np.random.random_sample()/100)
+    else:
+        z_linha.append(item-np.random.random_sample()/100)
+
+plt.xlabel('lambda')
+plt.ylabel('mi')
+
+my_col = cm.jet(np.ones((len(z_linha),len(z_linha))))
 
 
-ax.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=0.2)
-#ax.plot_trisurf(x, y, z, cmap=plt.colors() , linewidth=0.2)
-
-ax.plot_trisurf(x, y, w, linewidth=0.2)
+ax.plot_trisurf(x, y, z_linha, cmap='Blues', linewidth=0.2,alpha=0.5,facecolors = my_col)
+ax.plot_trisurf(x, y, w, cmap='Reds' , linewidth=0.2,alpha=0.5,facecolors = my_col)
 
 
-plt.show()'''
+plt.show()
 
-import matplotlib.pyplot as plt
+'''import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
+from doTheJob import *
 
-x1 = [1,2,3]
-x2 = [4,8,12]
-x3 = [10, 20, 30]
+result=doTheJob(politics=1,lambda_init=1,lambda_end=1000,lambda_step=100,mi_init=1,mi_end=1000,mi_step=100,iterations=1000)
+
+x1=result[0]
+x2=result[1]
+x3=result[24]
+x4=result[41]
 
 X1, X2 = np.meshgrid(x1, x2)
 
@@ -41,9 +57,14 @@ X3 = []
 for i in range(len(x1)):
     X3.append(x3)
 
+X4 = []
+for i in range(len(x1)):
+    X4.append(x4)
+
 fig = plt.figure()
 ax = Axes3D(fig)
 
-ax.plot_surface(X1, X2, X3, cmap='Set1', edgecolor='w', alpha=0.5)
+ax.plot_surface(X1, X2, X3, cmap='plasma', edgecolor='w', alpha=0.5)
+#ax.plot_surface(X1, X2, X4, cmap='Set1', edgecolor='w', alpha=0.5)
 
-plt.show()
+plt.show()'''

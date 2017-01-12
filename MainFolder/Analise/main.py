@@ -10,7 +10,7 @@ if __name__ == "__main__":
     bank.create_IN_Bubble(ratePar=5)
     bank.create_WAIT_Bubble(policy="FCFS")
     bank.connect("IN_Bubble", 0, "WAIT_Bubble", 0)
-    bank.create_OUT_Bubble(ratePar=5)
+    bank.create_OUT_Bubble(ratePar=6)
     bank.connect("WAIT_Bubble", 0, "OUT_Bubble", 0)
 
     bank.startSystem()
