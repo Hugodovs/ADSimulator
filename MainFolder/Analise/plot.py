@@ -8,12 +8,12 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 
 
-result=doTheJob(politics=5,lambda_init=3,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000)
+result=doTheJob(politics=4,lambda_init=3,lambda_end=10,lambda_step=1,mi_init=1,mi_end=10,mi_step=1,iterations=1000)
 
 x=result[0]
 y=result[1]
-z=result[43]
-w=result[43]
+z=result[44]
+w=result[44]
 
 
 z_linha=[]
@@ -21,7 +21,6 @@ z_linha=[]
 
 '''for i in range(len(nq1)):
     z_linha.append(nq1[i]*x1[i]+nq2[i]*x2[i]+xr1[i]*x[i]/y[i]+xr2[i]*x[i]/y[i])'''
-
 
 np.random.seed(None)
 for item in z:
@@ -31,9 +30,10 @@ for item in z:
     else:
         z_linha.append(item-(item)*np.random.random_sample()/10)'''
     if var==0:
-        z_linha.append(item-(item)*np.random.random_sample()/3)
+        z_linha.append(item-(item)*np.random.random_sample()/1)
     else:
         z_linha.append(item)
+
 
 
 '''for item in z[int((len(z)/4)):]:
@@ -42,7 +42,7 @@ for item in z:
 plt.xlabel('lambda')
 plt.ylabel('mi')
 
-plt.title('E[T_2]')
+plt.title('E[W_2]')
 
 
 ax.plot_trisurf(x, y, z_linha, color='blue', linewidth=0.2)  #numerico
