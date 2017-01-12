@@ -65,7 +65,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(255)
+                    np.random.seed(1229)
                     bank = System("bank")
                     #generate the queues for analysis
                     bank.create_IN_Bubble(ratePar=i)
