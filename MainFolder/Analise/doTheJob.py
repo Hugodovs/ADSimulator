@@ -65,7 +65,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(1229)
+                    np.random.seed(2222)
                     bank = System("bank")
                     #generate the queues for analysis
                     bank.create_IN_Bubble(ratePar=i)
@@ -164,7 +164,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(94)
+                    np.random.seed(333)
                     bank = System("bank")
                     #generate the queues for analysis
                     bank.create_IN_Bubble(ratePar=i)
@@ -261,7 +261,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(96)
+                    np.random.seed(123)
                     bank = System("bank")
                     #generate the queues for analysis
 
@@ -359,7 +359,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(434)
+                    np.random.seed(321)
                     bank = System("bank")
                     #generate the queues for analysis
 
@@ -459,7 +459,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(667)
+                    np.random.seed(234)
                     bank = System("bank")
                     #generate the queues for analysis
 
