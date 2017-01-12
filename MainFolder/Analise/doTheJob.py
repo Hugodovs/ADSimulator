@@ -359,7 +359,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(199)
+                    np.random.seed(434)
                     bank = System("bank")
                     #generate the queues for analysis
 
@@ -459,7 +459,7 @@ def doTheJob(politics=1,lambda_init=1,lambda_end=10,lambda_step=1,mi_init=1,mi_e
             for j in range(mi_init,mi_end,mi_step):
                 if(j>i):
 
-                    np.random.seed(700)
+                    np.random.seed(667)
                     bank = System("bank")
                     #generate the queues for analysis
 
