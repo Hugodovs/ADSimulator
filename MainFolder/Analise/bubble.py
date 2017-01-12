@@ -327,13 +327,6 @@ class System:
             else:
                 string += "WAIT_" + str(i) + ":" + "\n"
 
-        for i, item in enumerate(self.WAIT_BubbleList):
-            if item.peopleList:
-                for person in item.peopleList:
-                    string += "WAIT_" + str(i) + person.printPerson() + "\n"
-            else:
-                string += "WAIT_" + str(i) + ":" + "\n"
-
         for i, item in enumerate(self.OUT_BubbleList):
             if item.busy_person != None:
                 string += "OUT_" + str(i) + item.busy_person.printPerson() + "\n"
