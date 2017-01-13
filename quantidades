@@ -5,7 +5,7 @@ E[N_q] - tamanho médio da fila de espera, somente fila de espera (quantidade de
 E[N_s] - tamanho médio do serviço, quantidade de pessoas em média no serviço
 E[T]  - tempo médio que uma pessoa perde no sistema
 E[X] - tempo médio de serviço definido como 1/mi
-E[W]  = E[U] -tempo médio que uma pessoa perde apenas na fila de espera
+E[W]  -tempo médio que uma pessoa perde apenas na fila de espera
 ro - utilização do sistema, definida como ro=lambda*E[X]=lambda/mi
 E[X_r] - tempo medio que falta para a pessoa sair do dsistema, servir os fregueses na frente e fazer o serviço, definido como E[X_r]=(1-ro)*E[W]/ro
 E[X_r]=E[X^2]/2E[X]

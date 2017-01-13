@@ -1,0 +1,54 @@
+Na pasta MainFolder/
+
+*numericalQueue1.py
+
+Foi usado para gerar uma fila em um arquivo para análise posterior, porém esta função foi incorporadaem outos arquivos e este não foi aproveitado. O comando para a sua execução é:
+
+$ python3 numericalQueue1.py
+
+ e como resultado o arquivo 'arquivo.txt' é gerado contendo uma fila da política 1.
+
+*theoricalNumbers.py
+
+Foi usado paracalcular valores analiticamente para a análise e comparação com resultados numéricos. Estea rquivo não foi usado no trabalho final e seu código foi incorporado em outros arquivos. Para executá-lo:
+
+$ python3 theoricalNumbers.py
+
+Na pasta MainFolder/Simulador
+
+*bubble.py
+
+O arquivo bubble.py implementa a fila.
+
+*README.py
+
+O arquivo README.py executa aimpementação de fila e gera um arquivo contendo todos os estados da fila obtidos da simulação. Dentro do arquivo estão instruções para mudar qual das 5 políticas constituintes do trabalho será executada. Para executá-lo:
+
+$ python3 README.py
+
+Na pasta MainFolder/Analise
+
+*analysis.py
+
+implementa o algoritmo para cálculo das quantidades numericamente, dado uma fila gerada.
+
+*parse.py
+
+implementa o parse que lê umarquivo com uma fila gerada e extrai os dados em uma estrutura adequada para se trabalhar.
+
+*main_analysys.py
+
+Gera uma fila e realiza uma análise, imprimindo os resultados na tela. Para eecutar:
+
+$python3 main_analysis.py
+
+*doTheJob.py
+
+biblioteca que possui encapsulado todo o processo de gerar várias filas com lambda e mi variando, faze a análise de cada fila e calcular as quantidades desejadas numéricas e analíticas, depois retorna uma estrutura com todos os dados compilados.
+
+*plot.py
+
+Usado para plotar os gráficos do relatório. Para usar:
+
+$ python3 plot.py
+
